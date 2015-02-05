@@ -18,18 +18,9 @@
 #
 # To learn more, please read the Rails Internationalization guide
 # available at http://guides.rubyonrails.org/i18n.html.
-
-en:
+I18n.locale = :sv
+sv:
   activerecord:
-    attributes:
-      user:
-        password_confirmation: "Lösenord"
-        password: "Lösenord"
     errors:
-      models:
-        user:
-          attributes:
-            password_confirmation:
-              confirmation: " matchar inte!"
-            password:
-              blank: " måste vara med"
+      messages:
+        confirmation: "does not match"

@@ -8,8 +8,7 @@ class User < ActiveRecord::Base
 
 
 
-  validates_format_of :email, :with => /\A[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+\z/,
-            :presence => {:message => "Du måste ange en giltig e-post"}
+  validates_format_of :email, :with => /\A[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+\z/ , :message => "Du måste ange en giltig e-post"
 
 
 
