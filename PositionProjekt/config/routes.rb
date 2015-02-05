@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   post 'create' => "users#create", as: :create
 
-  root to: "users#login"
+  root to: "users#index"
 
   # Example resource route with options:
   #   resources :products do

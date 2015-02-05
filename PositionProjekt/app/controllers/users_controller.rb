@@ -5,7 +5,12 @@ class UsersController < ApplicationController
   end
 
   def login
-
+    user = User.find_by_email(params[:email])
+    if user && user.authenticate(params[:password])
+      redirect_to index_path
+    else
+      render :action => 'login'
+    end
   end
 
   def new#(user = nil)
