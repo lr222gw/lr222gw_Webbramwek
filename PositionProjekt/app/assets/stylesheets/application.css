@@ -13,3 +13,67 @@
  *= require_tree .
  *= require_self
  */
+body {
+    font-family: sans-serif;
+    background-color: rgb(225, 235, 236);
+}
+.userDiv {
+    margin: 5px;
+    background-color: rgb(191, 198, 199);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.forUser h3 {
+    margin-top: 0px;
+    border-bottom: solid rgb(0, 0, 0) 1px;
+}
+
+.appInList {
+    background-color: rgb(240, 240, 240);
+    padding: 5px;
+    box-shadow: 0 0 5px 0px rgb(0, 0, 0);
+    margin-bottom: 10px;
+}
+.appName h4 {
+    margin-top: 5px;
+    text-transform: capitalize;
+    margin-bottom: 0px;
+}
+
+.appDetail {
+    margin-top: -5px;
+}
+.appInList a {
+    background-color: rgb(191, 198, 199);
+    padding: 5px;
+    text-decoration: none;
+    color: rgb(245, 245, 245);
+    border-radius: 5px;
+}
+
+div#login, #register {
+    width: 50%;
+    margin: 0 auto;
+    background-color: rgb(190, 192, 192);
+    border-radius: 5px;
+    padding: 10px;
+}
+h2 {
+    margin-top: 0px;
+}
+
+.notice {
+    background-color: rgb(255, 255, 0);
+    margin: -10px;
+    padding: 10px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+form p, form div {
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-family: monospace;
+    font-size: x-large;
+}

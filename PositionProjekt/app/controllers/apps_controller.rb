@@ -29,6 +29,7 @@ class AppsController < ApplicationController
     end
     if @user.isAdmin == true
       redirect_to backendIndex_path
+      #render  'users/backendIndex'
     else
       render action: 'index'
     end

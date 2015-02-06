@@ -2,7 +2,7 @@
 
 <div id="applicationList">
 
-  <%if !@user.apps.length != 0 %>
+  <%if @user.apps.length != 0 %>
       <% @user.apps.each do |app| %>
           <div class="appInList">
             <div class="appName"><h4><%= app.name %></h4></div>
