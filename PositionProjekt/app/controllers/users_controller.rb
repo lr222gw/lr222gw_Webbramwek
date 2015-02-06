@@ -3,7 +3,9 @@ class UsersController < ApplicationController
   before_action :currentUserIsAdmin, only: [:backendIndex]
 
   def index
-
+    if !currentUser.nil?
+      redirect_to users_apps_path
+    end
   end
 
   def backendloginindex
@@ -23,6 +25,11 @@ class UsersController < ApplicationController
       render :action => "backendloginindex"
     end
 
+  end
+
+  def logout
+    session[:userid] = nil
+    redirect_to root_path
   end
 
   def login

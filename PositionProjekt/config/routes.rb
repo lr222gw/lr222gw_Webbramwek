@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   get 'adminbase' => "users#backendIndex", as: :backendIndex
   post 'create' => "users#create", as: :create
 
+  get 'logout' => 'users#logout', as: :logout
 
   root to: "users#index"
 
