@@ -7,6 +7,7 @@
           <div class="appInList">
             <div class="appName"><h4><%= app.name %></h4></div>
             <div class="appDetail"><p>Your ApiKey: <%= app.appKey %></p></div>
+            <%= link_to "Ändra nyckel", edit_app_path(:id => app.id) %>
           </div>
       <% end %>
   <% else %>

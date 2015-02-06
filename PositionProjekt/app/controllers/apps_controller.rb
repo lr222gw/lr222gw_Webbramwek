@@ -7,6 +7,19 @@ class AppsController < ApplicationController
     @user = currentUser
   end
 
+  def edit
+    @user = currentUser
+    @app = App.find(params[:id]) # <- fungerar           #@user.apps.where(id: params[:id]) <-- gAlEt SkRaTt *FUNKAR INTE HAHAHAH ! ** :( (får rätt men kan ej anropa funktioner på den)
+
+    #Ny säkerhets anordning så ingen byter på någon annans nyckel...
+    if @user.apps.include? @app
+      if @app
+        @app.setApplicationKey
+      end
+    end
+    render action: 'index'
+  end
+
   def new
     @app = App.new
   end

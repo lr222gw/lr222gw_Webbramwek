@@ -12,9 +12,10 @@ class App < ActiveRecord::Base
             :presence => {message: "Din applikation måste ha ett namn"}
   validates_length_of :name, :minimum => 4, :maximum => 25
 
-  def SetApplicationKey isForDefault = false
+
+  def setApplicationKey isForDefault = false
     salt = BCrypt::Engine.generate_salt
-    keyName = self.user.email + self.name
+    keyName = self.name + self.user.email
     key = BCrypt::Engine.hash_secret(keyName, salt)
     urlFriendlyKey = CGI.escape(key)
     self.appKey = urlFriendlyKey
@@ -26,7 +27,7 @@ class App < ActiveRecord::Base
   def default_values
 
     #metoden under ser till att ta fram en nyckel som är unik för användaren och dennes apps.. Den gör nyckeln URLvänlig också!
-    self.SetApplicationKey true
+    setApplicationKey true
 
   end
 
