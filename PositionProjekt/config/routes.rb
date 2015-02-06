@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   get 'login' => "users#index" #Gör att man kommer till låginsidan om man refreshar (markera url + enter)...
   get 'adminlogin' => "users#backendloginindex", as: :backlogin
   post 'adminlogin' => "users#backendlogin"
+  get 'adminbase' => "users#backendIndex", as: :backendIndex
   post 'create' => "users#create", as: :create
 
   root to: "users#index"
