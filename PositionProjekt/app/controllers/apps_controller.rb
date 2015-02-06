@@ -7,6 +7,16 @@ class AppsController < ApplicationController
     @user = currentUser
   end
 
+  def delete
+    @app = App.find(params[:id])
+  end
+
+  def destroy
+    app = App.find(params[:id])
+    app.destroy
+    redirect_to controller: 'users', action: 'backendIndex'
+  end
+
   def edit
     @user = currentUser
     @app = App.find(params[:id]) # <- fungerar           #@user.apps.where(id: params[:id]) <-- gAlEt SkRaTt *FUNKAR INTE HAHAHAH ! ** :( (får rätt men kan ej anropa funktioner på den)

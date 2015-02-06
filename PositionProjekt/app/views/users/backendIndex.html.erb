@@ -8,7 +8,7 @@
             <div class="appName"><h4><%= app.name %></h4></div>
             <div class="appDetail"><p>ApiKey: <%= app.appKey %></p></div>
             <%= link_to "Ändra nyckel", edit_app_path(:id => app.id) %>
-            <%= link_to "Ta bort App", app_path(:id => app.id) %>
+            <%= link_to "Ta bort App", app, method: :delete, data: { confirm: 'Are Ya Sure?'} %> <!--destroy_app_path(:id => app.id)-->
           </div>
         <%end%>
     </div>
