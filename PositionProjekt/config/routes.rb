@@ -15,9 +15,15 @@ Rails.application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
+  resource :users do
+    resources :apps
+  end
   resource :users
+  resources :apps
+
 
   post 'login' => "users#login", as: :login
+  get 'login' => "users#index" #Gör att man kommer till låginsidan om man refreshar (markera url + enter)...
 
   post 'create' => "users#create", as: :create
 
@@ -59,7 +65,7 @@ Rails.application.routes.draw do
   # Example resource route within a namespace:
   #   namespace :admin do
   #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
+  #     # (apps/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
 end

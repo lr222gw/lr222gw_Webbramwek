@@ -1,0 +1,18 @@
+<h2>Dina Applikationer</h2>
+
+<div id="applicationList">
+
+  <%if !@user.apps.length != 0 %>
+      <% @user.apps.each do |app| %>
+          <div class="appInList">
+            <div class="appName"><h4><%= app.name %></h4></div>
+            <div class="appDetail"><p>Your ApiKey: <%= app.appKey %></p></div>
+          </div>
+      <% end %>
+  <% else %>
+    <h4>Du har inte några applikationer än! :(</h4>
+  <% end %>
+
+  <%= link_to "Regga app", new_users_app_path %>
+
+</div>

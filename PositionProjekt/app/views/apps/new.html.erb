@@ -1,0 +1,11 @@
+<div id="register">
+  <h2><span class="RegText"></span>Registrera app</h2>
+
+  <fieldset>
+    <%= form_for @app do |app|%>
+        <div><%= app.label :name %></div>
+        <div><%= app.text_field :name %></div>
+        <div><%= app.submit "Registrera Appen!"%></div>
+    <% end %>
+  </fieldset>
+</div>

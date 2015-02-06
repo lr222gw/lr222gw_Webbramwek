@@ -16,8 +16,8 @@ class App < ActiveRecord::Base
     salt = BCrypt::Engine.generate_salt
     keyName = self.user.email + self.name
     key = BCrypt::Engine.hash_secret(keyName, salt)
-    urlFriendlyKey = CGI.escape(key);
-    self.appKey = urlFriendlyKey;
+    urlFriendlyKey = CGI.escape(key)
+    self.appKey = urlFriendlyKey
     if isForDefault != true
       self.save
     end
@@ -25,7 +25,7 @@ class App < ActiveRecord::Base
 
   def default_values
 
-    #metoden under ser till att ta fram en nyckel som är unik för användaren och dennes app.. Den gör nyckeln URLvänlig också!
+    #metoden under ser till att ta fram en nyckel som är unik för användaren och dennes apps.. Den gör nyckeln URLvänlig också!
     self.SetApplicationKey true
 
   end
