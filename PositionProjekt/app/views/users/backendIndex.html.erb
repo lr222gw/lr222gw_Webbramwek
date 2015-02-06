@@ -1,0 +1,15 @@
+<h1>Hello Admin</h1>
+
+<% @users.each do |user| %>
+    <div class="userDiv">
+      <div class="forUser"><h3>For user: <%= user.email%></h3></div>
+        <% user.apps.each do |app|%>
+          <div class="appInList">
+            <div class="appName"><h4><%= app.name %></h4></div>
+            <div class="appDetail"><p>ApiKey: <%= app.appKey %></p></div>
+            <%= link_to "Ändra nyckel", edit_app_path(:id => app.id) %>
+            <%= link_to "Ta bort App", app_path(:id => app.id) %>
+          </div>
+        <%end%>
+    </div>
+<% end  %>

@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
 
+  before_action :currentUserIsAdmin, only: [:backendIndex]
+
   def index
 
   end
@@ -8,10 +10,14 @@ class UsersController < ApplicationController
 
   end
 
+  def backendIndex
+    @users = User.all
+  end
+
   def backendlogin
     user = User.find_by_email(params[:email])
     if user.isAdmin == true
-      handleUserLogin
+      handleUserLogin true
     else
       flash[:notice] = "Du är ju inte admin, gå härifrån... din jävel :<"
       render :action => "backendloginindex"
@@ -46,11 +52,16 @@ class UsersController < ApplicationController
       params.require(:user).permit(:email, :password, :password_confirmation)
   end
 
-  def handleUserLogin
+  def handleUserLogin adminLogin = false
     @user = User.find_by_email(params[:email])
     if @user && @user.authenticate(params[:password])
       session[:userid] = @user.id
-      redirect_to users_apps_path
+      if adminLogin == true
+        redirect_to backendIndex_path
+      else
+        redirect_to users_apps_path
+      end
+
     else
       myStringWithErrors = ""
 

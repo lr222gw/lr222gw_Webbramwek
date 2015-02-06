@@ -5,6 +5,16 @@ class ApplicationController < ActionController::Base
 
 
 
+  def currentUserIsAdmin
+    isUserOnline
+    @user = currentUser
+
+
+    if @user.isAdmin == false
+      redirect_to root_path
+    end
+
+  end
 
   def currentUser
 
