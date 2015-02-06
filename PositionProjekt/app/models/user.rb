@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
 
   has_secure_password
 
+  has_many :apps
+
   validates :email,
             :presence => {:message => "Du måste ange en e-post"},
             :uniqueness => true
