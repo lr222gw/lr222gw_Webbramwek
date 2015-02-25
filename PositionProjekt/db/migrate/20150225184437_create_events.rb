@@ -7,13 +7,13 @@ class CreateEvents < ActiveRecord::Migration
       #t.belongs_to :tag, index: true
       t.belongs_to :user, index: true # Dessa måste anges med små bokstäver...
 
-      t.datetime :EventDate
+      t.datetime :eventDate
 
       t.timestamps
 
-      t.string :EventName
+      t.string :name
 
-      t.string :EventDescription
+      t.string :desc
 
       #t.references :Position, :Tag, :User #denna kan ej vara med då vi använder t.belongs_to <- det blir duplicationer...
 

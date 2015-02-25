@@ -3,7 +3,7 @@ class Event < ActiveRecord::Base
   belongs_to :position
   belongs_to :user
 
-  has_many :tags
+  has_many :tag_on_events
 
   validates_presence_of :user, :user_id       #Ser till att vi kräver en användare för sparning av projektet...
   validates_associated :user
@@ -13,11 +13,11 @@ class Event < ActiveRecord::Base
 
 
 
-  validates :EventName, presence: true
+  validates :name, presence: true
 
-  validates :EventDescription, presence: true
+  validates :desc, presence: true
 
-  validates :EventDate, presence: true
+  validates :eventDate, presence: true
 
   # validate :EventDate_is_valid_datetime
   #

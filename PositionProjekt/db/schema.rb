@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150225184523) do
+ActiveRecord::Schema.define(version: 20150225205635) do
 
   create_table "apps", force: true do |t|
     t.integer  "user_id"
@@ -26,11 +26,11 @@ ActiveRecord::Schema.define(version: 20150225184523) do
   create_table "events", force: true do |t|
     t.integer  "position_id"
     t.integer  "user_id"
-    t.datetime "EventDate"
+    t.datetime "eventDate"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "EventName"
-    t.string   "EventDescription"
+    t.string   "name"
+    t.string   "desc"
   end
 
   add_index "events", ["position_id"], name: "index_events_on_position_id"
@@ -43,14 +43,21 @@ ActiveRecord::Schema.define(version: 20150225184523) do
     t.datetime "updated_at"
   end
 
-  create_table "tags", force: true do |t|
-    t.string   "Name"
-    t.integer  "Event_id"
+  create_table "tag_on_events", force: true do |t|
+    t.integer  "tag_id"
+    t.integer  "event_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "tags", ["Event_id"], name: "index_tags_on_Event_id"
+  add_index "tag_on_events", ["event_id"], name: "index_tag_on_events_on_event_id"
+  add_index "tag_on_events", ["tag_id"], name: "index_tag_on_events_on_tag_id"
+
+  create_table "tags", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email"
