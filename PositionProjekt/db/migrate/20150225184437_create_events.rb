@@ -3,7 +3,9 @@ class CreateEvents < ActiveRecord::Migration
     create_table :events do |t|
 
 
-      t.belongs_to :Position, :Tag, :User
+      t.belongs_to :position, index: true
+      #t.belongs_to :tag, index: true
+      t.belongs_to :user, index: true # Dessa måste anges med små bokstäver...
 
       t.datetime :EventDate
 
@@ -13,7 +15,7 @@ class CreateEvents < ActiveRecord::Migration
 
       t.string :EventDescription
 
-      t.references :Position, :Event, :User
+      #t.references :Position, :Tag, :User #denna kan ej vara med då vi använder t.belongs_to <- det blir duplicationer...
 
     end
   end

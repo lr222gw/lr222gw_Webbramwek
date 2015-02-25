@@ -11,6 +11,53 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20150225184523) do
+
+  create_table "apps", force: true do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.string   "appKey"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "apps", ["user_id"], name: "index_apps_on_user_id"
+
+  create_table "events", force: true do |t|
+    t.integer  "position_id"
+    t.integer  "user_id"
+    t.datetime "EventDate"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "EventName"
+    t.string   "EventDescription"
+  end
+
+  add_index "events", ["position_id"], name: "index_events_on_position_id"
+  add_index "events", ["user_id"], name: "index_events_on_user_id"
+
+  create_table "positions", force: true do |t|
+    t.string   "lng"
+    t.string   "lat"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tags", force: true do |t|
+    t.string   "Name"
+    t.integer  "Event_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tags", ["Event_id"], name: "index_tags_on_Event_id"
+
+  create_table "users", force: true do |t|
+    t.string   "email"
+    t.boolean  "isAdmin",         default: false
+    t.string   "password_digest"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end

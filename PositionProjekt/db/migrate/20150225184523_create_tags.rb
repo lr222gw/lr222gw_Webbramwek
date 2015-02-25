@@ -4,7 +4,7 @@ class CreateTags < ActiveRecord::Migration
 
       t.string :Name
 
-      t.belongs_to :Event
+      t.belongs_to :Event, index: true
 
       t.timestamps
     end

@@ -1,11 +1,10 @@
 class CreatePositions < ActiveRecord::Migration
   def change
     create_table :positions do |t|
+      
 
-
-
-      t.integer :lng
-      t.integer :lat
+      t.string :lng
+      t.string :lat
 
       t.timestamps
     end
