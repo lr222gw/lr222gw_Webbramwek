@@ -16,7 +16,7 @@ app.user = user
 app.save
 
 Position.delete_all
-pos = Position.create(lat:"321.12332", lng:"31.3214")
+pos = Position.create(lat:"321.12332", lng:"31.3214", name:"testPosition")
 pos.save
 
 Event.delete_all
