@@ -1,6 +1,7 @@
 class AppsController < ApplicationController
 
   before_action :isUserOnline
+  before_action :authenticateJWT
 
 
   def index

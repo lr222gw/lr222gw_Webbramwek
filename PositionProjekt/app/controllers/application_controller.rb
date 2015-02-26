@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
     #Skickar bara med UserID då jag inte vill kompromissa känslig data...
 
     secret = Rails.application.secrets.secret_key_base #En "Enviroment Variable" vad det nu kan tänkas innebära...
-    payload={user_id:userID, exp:2.hours.from.now} #All information vi vill skicka med
+    payload = {user_id:userID, exp:2.hours.from_now} #All information vi vill skicka med
     JWT.encode(payload, secret, "HS512")  #encodar ihop hemligheten med vår payload och väljer hashningsalgoritm "HS512"
 
   end
