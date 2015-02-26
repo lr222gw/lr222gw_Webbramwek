@@ -64,9 +64,11 @@ class UsersController < ApplicationController
     if @user && @user.authenticate(params[:password])
       session[:userid] = @user.id
       if adminLogin == true
-        redirect_to backendIndex_path
+        render json: {auth_token: create_token(@user.id)}
+        #redirect_to backendIndex_path
       else
-        redirect_to users_apps_path
+        render json: {auth_token: create_token(@user.id)}
+        #redirect_to users_apps_path
       end
 
     else
