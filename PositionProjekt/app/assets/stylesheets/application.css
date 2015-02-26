@@ -77,3 +77,15 @@ form p, form div {
     font-family: monospace;
     font-size: x-large;
 }
+
+div#token {
+    background-color: rgb(255, 255, 255);
+    margin-bottom: 10px;
+    padding: 10px;
+    padding-top: 1px;
+    box-shadow: rgb(0, 0, 0) 0px 0px 5px 0px;
+    word-break: break-all;
+}
+#token p {
+    font-weight: bold;
+}

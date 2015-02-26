@@ -64,11 +64,11 @@ class UsersController < ApplicationController
     if @user && @user.authenticate(params[:password])
       session[:userid] = @user.id
       if adminLogin == true
-        render json: {auth_token: create_token(@user.id)}
-        #redirect_to backendIndex_path #tillfälligt avstängd då jag testar JWT
+        #render json: {auth_token: create_token(@user.id)}
+        redirect_to backendIndex_path #tillfälligt avstängd då jag testar JWT
       else
-        render json: {auth_token: create_token(@user.id)}
-        #redirect_to users_apps_path #tillfälligt avstängd då jag testar JWT
+        #render json: {auth_token: create_token(@user.id)}
+        redirect_to beforeIndex_path #users_apps_path #tillfälligt avstängd då jag testar JWT
       end
 
     else

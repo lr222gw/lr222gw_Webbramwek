@@ -21,6 +21,17 @@ Rails.application.routes.draw do
   resource :users
   resources :apps
 
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+
+      resources :events #:api/v1/events
+      resources :users
+      resources :tags
+
+
+    end
+  end
+
 
   post 'login' => "users#login", as: :login
   get 'login' => "users#index" #Gör att man kommer till låginsidan om man refreshar (markera url + enter)...
@@ -30,6 +41,8 @@ Rails.application.routes.draw do
   post 'create' => "users#create", as: :create
 
   get 'logout' => 'users#logout', as: :logout
+
+  get 'beforeindex' => 'apps#beforeIndex', as: :beforeIndex
 
   root to: "users#index"
 

@@ -1,7 +1,8 @@
 <h2>Dina Applikationer</h2>
 
-<div id="applicationList">
+<div id="token"><p>Your AccessToken: </p><%= @token %></div>
 
+<div id="applicationList">
   <%if @user.apps.length != 0 %>
       <% @user.apps.each do |app| %>
           <div class="appInList">

@@ -1,11 +1,17 @@
 class AppsController < ApplicationController
 
   before_action :isUserOnline
-  before_action :authenticateJWT
+  #before_action :authenticateJWT
 
+  def beforeIndex #För att man bara vill skapa Authorization-Token en gång
+    @user = currentUser
+    @token = create_token(@user.id)
+    redirect_to apps_path
+  end
 
   def index
     @user = currentUser
+    @token = session["token"]
   end
 
   def delete
