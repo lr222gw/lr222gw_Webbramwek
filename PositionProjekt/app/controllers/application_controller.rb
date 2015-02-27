@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
+  protect_from_forgery with: :null_session #:exception
 
   def validateAPIKey(apikey)
     if(apikey.nil?)
@@ -30,11 +30,11 @@ class ApplicationController < ActionController::Base
     if(request.headers["Authorization"].present?)
 
       auth_header = request.headers["Authorization"].split(" ").last
-
+      puts auth_header
       @token_payload = validate_token(auth_header) #auth_header är vårt Token som vi kontrollerar. vi vill fåtillbaka en payload
       if(!@token_payload) #om något är fel på payloaden
 
-        render json: {error: "The proviced Token wasn't correct"}, status: :bad_request
+        render json: {error: "The provided Token wasn't correct"}, status: :bad_request
 
       end
 
@@ -49,21 +49,44 @@ class ApplicationController < ActionController::Base
 
     secret = Rails.application.secrets.secret_key_base #En "Enviroment Variable" vad det nu kan tänkas innebära...
     payload = {user_id:userID, exp:2.hours.from_now} #All information vi vill skicka med
+
     token = JWT.encode(payload, secret, "HS512")  #encodar ihop hemligheten med vår payload och väljer hashningsalgoritm "HS512"
     session["token"] = token
+    puts token
     token
   end
 
   def validate_token(token)
+    puts token
     secret = Rails.application.secrets.secret_key_base
+    begin
+      JWT.decode(token, secret, "HS512", {verify_expiration: false})
+    rescue Exception
+      render json: {error: "The provided Token wasn't correct"}, status: :bad_request
 
-    payload = JWT.decode(token, secret, "HS512")
-    if(payload[0][exp] >= time.now.to_i) # Kan sätta mer säkerhet angående om tiden är före token skapades. etc
-      return payload
     else
-      put "Token is too old."
-    end
 
+      payload = JWT.decode(token, secret, "HS512", {verify_expiration: false}) #JWT.decode("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoyMSwiZXhwIjoiMjAxNS0wMi0yOFQwOTozNDo0OS4xOTdaIn0.hR2yWysBuz3t4ft6dqZ7FYMhqo3F8M0DfuqSrDND-C48KbbUYYXpJztUkX4rzmomV9h0uXfxJ0bguVWUqLswNA", Rails.application.secrets.secret_key_base, "HS512")
+      puts payload[0]["exp"].as_json
+      if(payload[0]["exp"].to_datetime.to_i >= Time.now.to_i) # Kan sätta mer säkerhet angående om tiden är före token skapades. etc
+        return payload
+      else
+        puts payload[0]["exp"].to_datetime.to_i
+        puts Time.now.to_i
+        puts "Token is too old."
+        render json: {error: "The provided Token is to old"}, status: :not_acceptable
+      end
+      #Tidigare kod, som inte fungerade :S
+      # payload = JWT.decode(token, secret, "HS512", {verify_expiration: true}) #JWT.decode("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoyMSwiZXhwIjoiMjAxNS0wMi0yOFQwOTozNDo0OS4xOTdaIn0.hR2yWysBuz3t4ft6dqZ7FYMhqo3F8M0DfuqSrDND-C48KbbUYYXpJztUkX4rzmomV9h0uXfxJ0bguVWUqLswNA", Rails.application.secrets.secret_key_base, "HS512")
+      #
+      # if(payload[0]["exp"] >= Time.now.to_i) # Kan sätta mer säkerhet angående om tiden är före token skapades. etc
+      #   return payload
+      # else
+      #
+      #
+      #   puts "Token is too old."
+      # end
+    end
   end
 
 

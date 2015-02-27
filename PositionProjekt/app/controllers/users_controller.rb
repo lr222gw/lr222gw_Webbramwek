@@ -2,6 +2,7 @@ class UsersController < ApplicationController
 
   before_action :currentUserIsAdmin, only: [:backendIndex]
 
+
   def index
     if !currentUser.nil?
       redirect_to users_apps_path

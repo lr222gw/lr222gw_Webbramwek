@@ -36,7 +36,6 @@ module Api
                         :entries => events,
                        :next_page => nextpage,
                        :prev_page => prevpage
-
                    }
           }
         end

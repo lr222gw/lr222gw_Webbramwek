@@ -2,8 +2,10 @@
 module Api
   module V1
     class TagsController < ApplicationController
+      #skip_before_filter  :verify_authenticity_token
       before_action do
         validateAPIKey(params[:apikey])
+        authenticateJWT
       end
       respond_to :json
 
