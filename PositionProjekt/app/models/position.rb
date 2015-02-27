@@ -1,9 +1,19 @@
 class Position < ActiveRecord::Base
-
+  after_validation :geocode #Aktivaerar geocode på instansen av modellen! (?)
   has_many :events
 
   validates :name, presence: true
-  validates :lng, presence: true
-  validates :lat, presence: true
+  #Tar bort validering PGA geocode hämtar denna data om den ej är satt vid sparning.
+  #validates :longitude, presence: true
+  #validates :latitude, presence: true
+
+  geocoded_by :name
+
+
+  def as_json(options={})
+
+    super(options.merge(:include => :events))
+
+  end
 
 end

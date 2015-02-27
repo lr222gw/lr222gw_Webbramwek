@@ -3,8 +3,8 @@ class CreatePositions < ActiveRecord::Migration
     create_table :positions do |t|
       
       t.string :name
-      t.string :lng
-      t.string :lat
+      t.float :longitude
+      t.float :latitude
 
       t.timestamps
     end

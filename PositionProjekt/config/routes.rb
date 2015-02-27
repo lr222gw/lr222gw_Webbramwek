@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       resources :events #:api/v1/events
       resources :users
       resources :tags
+      resources :positions
 
     end
   end

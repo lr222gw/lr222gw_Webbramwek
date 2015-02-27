@@ -38,8 +38,8 @@ ActiveRecord::Schema.define(version: 20150225205635) do
 
   create_table "positions", force: true do |t|
     t.string   "name"
-    t.string   "lng"
-    t.string   "lat"
+    t.float    "longitude"
+    t.float    "latitude"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

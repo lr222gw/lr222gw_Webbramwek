@@ -31,13 +31,13 @@ app4.user = user3
 app4.save
 
 Position.delete_all
-pos = Position.create(lat:"321.12332", lng:"31.3214", name:"testPosition Kronan")
+pos = Position.create(latitude:321.12332, longitude:31.3214, name:"testPosition Kronan")
 pos.save
-pos2 = Position.create(lat:"564.12332", lng:"432.3214", name:"testPosition2 Lövet")
+pos2 = Position.create(latitude:564.12332, longitude:432.3214, name:"testPosition2 Lövet")
 pos2.save
-pos3 = Position.create(lat:"12.12332", lng:"615.3214", name:"testPosition3 Flaskan")
+pos3 = Position.create(latitude:12.12332,  longitude:615.3214, name:"testPosition3 Flaskan")
 pos3.save
-pos4 = Position.create(lat:"645.12332", lng:"54.3214", name:"testPosition4 Skivan")
+pos4 = Position.create(latitude:645.12332, longitude:54.3214, name:"testPosition4 Skivan")
 pos4.save
 
 Event.delete_all

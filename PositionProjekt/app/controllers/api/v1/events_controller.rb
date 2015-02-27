@@ -1,14 +1,13 @@
 
 module Api
   module V1
-
     class EventsController < ApplicationController
       respond_to :json
 
       def index
 
         q = params[:query]
-        
+
         puts Event.all.where("name LIKE :q", {:q => "%#{q}%"})
         events = Event.all.where("name LIKE :q", {:q => "%#{q}%"}).paginate(page: params[:page], per_page: 15).order("eventDate DESC")#all.sort_by &:eventDate
 
@@ -41,7 +40,9 @@ module Api
       end
 
       def show
-        respond_with Event.find(params[:id])
+        event = Event.find(params[:id]);
+
+        respond_with event
       end
 
       def create
