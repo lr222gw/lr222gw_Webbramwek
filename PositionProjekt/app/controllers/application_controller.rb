@@ -3,6 +3,21 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  def validateAPIKey(apikey)
+    if(apikey.nil?)
+      #Kanske ska visa felmeddelande här istället?
+      render json: {error: "Need to include API-key, API-key is missing..."}, status: :forbidden and return
+      #redirect_to root_path
+    end
+    puts apikey
+    if(App.where(:appKey => apikey).exists?)
+      #Allting är som det ska och inget behöver avbrytas...
+    else
+      render json: {error: "API-key is invalid..."}, status: :forbidden and return
+    end
+
+  end
+
   def createJWT(user)
     userID = user.id
     #userEmail = user.email

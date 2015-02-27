@@ -2,6 +2,9 @@
 module Api
   module V1
     class EventsController < ApplicationController
+      before_action do
+        validateAPIKey(params[:apikey])
+      end
       respond_to :json
 
       def index

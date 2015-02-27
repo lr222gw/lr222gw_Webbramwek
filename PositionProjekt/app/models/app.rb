@@ -1,5 +1,5 @@
 class App < ActiveRecord::Base
-
+  require "base64"
   before_save :default_values # ser till at default_valuees körs...
 
 
@@ -16,8 +16,10 @@ class App < ActiveRecord::Base
   def setApplicationKey isForDefault = false
     salt = BCrypt::Engine.generate_salt
     keyName = self.name + self.user.email
-    key = BCrypt::Engine.hash_secret(keyName, salt)
-    urlFriendlyKey = CGI.escape(key)
+    #Gjorde om koden lite, Base64.strict_encode64 är bättre för URLer... (inga mellanrum eller konstiheter...)
+    #key = BCrypt::Engine.hash_secret(keyName, salt)
+    # urlFriendlyKey = CGI.escape(key)
+    urlFriendlyKey = Base64.strict_encode64(keyName + salt)
     self.appKey = urlFriendlyKey
     if isForDefault != true
       self.save

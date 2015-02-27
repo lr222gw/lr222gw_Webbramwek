@@ -1,6 +1,9 @@
 module Api
   module V1
     class PositionsController < ApplicationController
+      before_action do
+        validateAPIKey(params[:apikey])
+      end
       respond_to :json
 
       class Position < ::Position
