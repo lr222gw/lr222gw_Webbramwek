@@ -21,7 +21,8 @@ class Event < ActiveRecord::Base
 
   def as_json(options = {})
 
-    super(options.merge( :include => [:position, :user => {:except => [:password_digest]} ], :methods => :userURL ))
+    super(options.merge( :include => { :position=> {}, :tag_on_events => {:include => :tag }, :user => {:except => [:password_digest]}}, :methods => :userURL ))
+
 
   end
 

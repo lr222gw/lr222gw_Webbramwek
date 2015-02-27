@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 20150225205635) do
     t.datetime "updated_at"
   end
 
-  create_table "tag_on_events", id: false, force: true do |t|
+  create_table "tag_on_events", force: true do |t|
     t.integer  "tag_id"
     t.integer  "event_id"
     t.datetime "created_at"
