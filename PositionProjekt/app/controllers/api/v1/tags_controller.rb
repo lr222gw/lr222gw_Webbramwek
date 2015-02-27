@@ -2,7 +2,7 @@
 module Api
   module V1
     class TagsController < ApplicationController
-      #skip_before_filter  :verify_authenticity_token
+      skip_before_filter  :verify_authenticity_token
       before_action do
         validateAPIKey(params[:apikey])
         authenticateJWT
@@ -46,7 +46,14 @@ module Api
       end
 
       def create
-        respond_with Tag.create(params[:Tag])
+        # Vi skapar en ny Tag, Vi berättar att vi ska skicka in "name" vilket vi får från parametern!
+        @tag = Tag.new(name: params[:name])
+
+        # Nu gäller det bara att spara ner den!
+        @tag.save
+
+        #När vi kör respond så berättar vi först vilket namespace vi ska responda till(?), sen anger vi vad som ska respondas: @tag <-DEN DEN! DEN! :D
+        respond_with :api, :v1 , @tag
       end
 
       def update
