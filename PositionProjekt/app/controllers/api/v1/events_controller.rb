@@ -6,9 +6,8 @@ module Api
       respond_to :json
 
       def index
-        events = Event.all.paginate(page: params[:page], per_page: 15)#all.sort_by &:eventDate
-        events.sort_by &:eventDate
-        events.reverse
+        events = Event.all.paginate(page: params[:page], per_page: 15).order("eventDate DESC")#all.sort_by &:eventDate
+
         #events.paginate(page: params[:page], per_page: 15)
         if(events.total_entries > events.current_page * events.per_page)
           nextpage = "/api/v1/events?page="+(events.current_page + 1).to_s

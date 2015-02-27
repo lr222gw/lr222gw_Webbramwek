@@ -21,7 +21,7 @@ class Event < ActiveRecord::Base
 
   def as_json(options = {})
 
-    super(options.merge(:methods => :userURL ))
+    super(options.merge( :include => [:position, :user => {:except => [:password_digest]} ], :methods => :userURL ))
 
   end
 
@@ -29,6 +29,7 @@ class Event < ActiveRecord::Base
   def userURL
     {:self => api_v1_event_path(self)}
   end
+
 
   # validate :EventDate_is_valid_datetime
   #
