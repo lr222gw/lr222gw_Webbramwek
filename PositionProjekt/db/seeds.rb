@@ -64,6 +64,61 @@ tag3 = Tag.create(name:"Flaska")
 tag3.save
 tag4 = Tag.create(name:"Skiva")
 tag4.save
+tag5 = Tag.create(name:"Disco")
+tag5.save
+tag6 = Tag.create(name:"Stek")
+tag6.save
+tag7 = Tag.create(name:"Energi")
+tag7.save
+tag8 = Tag.create(name:"Burk")
+tag8.save
+tag9 = Tag.create(name:"Mat")
+tag9.save
+tag10 = Tag.create(name:"Spel")
+tag10.save
+tag11 = Tag.create(name:"Grönsaker")
+tag11.save
+tag12 = Tag.create(name:"Salt")
+tag12.save
+tag13 = Tag.create(name:"Skärm")
+tag13.save
+tag14 = Tag.create(name:"Coolt")
+tag14.save
+tag15 = Tag.create(name:"ballt")
+tag15.save
+tag16 = Tag.create(name:"fränt")
+tag16.save
+tag17 = Tag.create(name:"fiskigt")
+tag17.save
+tag18 = Tag.create(name:"Politiskt")
+tag18.save
+tag19 = Tag.create(name:"trevligt")
+tag19.save
+tag20 = Tag.create(name:"morotskaka")
+tag20.save
+tag21 = Tag.create(name:"framtid")
+tag21.save
+tag22 = Tag.create(name:"museum")
+tag22.save
+tag23 = Tag.create(name:"galleria")
+tag23.save
+tag24 = Tag.create(name:"shopping")
+tag24.save
+tag25 = Tag.create(name:"glass")
+tag25.save
+tag26 = Tag.create(name:"musik")
+tag26.save
+tag27 = Tag.create(name:"café")
+tag27.save
+tag28 = Tag.create(name:"kiosk")
+tag28.save
+tag29 = Tag.create(name:"mössor")
+tag29.save
+tag30 = Tag.create(name:"hamn")
+tag30.save
+tag31 = Tag.create(name:"hus")
+tag31.save
+
 
 TagOnEvent.delete_all
 toe = TagOnEvent.new

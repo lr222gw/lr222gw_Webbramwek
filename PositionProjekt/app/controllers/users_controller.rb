@@ -33,11 +33,11 @@ class UsersController < ApplicationController
   end
 
   def login
-   handleUserLogin
+    handleUserLogin
   end
 
   def new
-      @user = User.new
+    @user = User.new
   end
 
   def create
@@ -56,7 +56,7 @@ class UsersController < ApplicationController
 
   private
   def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation)
+    params.require(:user).permit(:email, :password, :password_confirmation)
   end
 
   def handleUserLogin adminLogin = false
