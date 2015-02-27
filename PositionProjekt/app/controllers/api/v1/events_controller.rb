@@ -6,7 +6,11 @@ module Api
       respond_to :json
 
       def index
-        events = Event.all.paginate(page: params[:page], per_page: 15).order("eventDate DESC")#all.sort_by &:eventDate
+
+        q = params[:query]
+        
+        puts Event.all.where("name LIKE :q", {:q => "%#{q}%"})
+        events = Event.all.where("name LIKE :q", {:q => "%#{q}%"}).paginate(page: params[:page], per_page: 15).order("eventDate DESC")#all.sort_by &:eventDate
 
         #events.paginate(page: params[:page], per_page: 15)
         if(events.total_entries > events.current_page * events.per_page)
@@ -18,12 +22,6 @@ module Api
           prevpage = "/api/v1/events?page="+(events.current_page - 1).to_s
         else
           prevpage = "null"
-        end
-
-        events.each do |event|
-          puts event.id
-
-          event.attributes.merge({:he => "he"})
         end
 
         respond_with(events) do |format|

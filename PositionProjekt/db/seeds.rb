@@ -136,7 +136,30 @@ toe3.event = event3
 toe3.tag = tag4
 toe3.save
 
+toe4 = TagOnEvent.new
+toe4.event = event3
+toe4.tag = tag5
+toe4.save
 
+toe5 = TagOnEvent.new
+toe5.event = event3
+toe5.tag = tag6
+toe5.save
+
+toe6 = TagOnEvent.new
+toe6.event = event2
+toe6.tag = tag7
+toe6.save
+
+toe7 = TagOnEvent.new
+toe7.event = event
+toe7.tag = tag7
+toe7.save
+
+toe8 = TagOnEvent.new
+toe8.event = event3
+toe8.tag = tag7
+toe8.save
 
 
 
