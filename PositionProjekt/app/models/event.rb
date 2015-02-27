@@ -19,6 +19,17 @@ class Event < ActiveRecord::Base
 
   validates :eventDate, presence: true
 
+  def as_json(options = {})
+
+    super(options.merge(:methods => :userURL ))
+
+  end
+
+  include Rails.application.routes.url_helpers
+  def userURL
+    {:self => api_v1_event_path(self)}
+  end
+
   # validate :EventDate_is_valid_datetime
   #
   # def EventDate_is_valid_datetime
