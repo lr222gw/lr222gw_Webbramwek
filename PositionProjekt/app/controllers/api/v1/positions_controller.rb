@@ -3,8 +3,8 @@ module Api
     class PositionsController < ApplicationController
       before_action do
         validateAPIKey(params[:apikey])
-        authenticateJWT
       end
+      before_filter :authenticateJWT,:only => [:destroy, :create, :update]
       respond_to :json
 
       class Position < ::Position

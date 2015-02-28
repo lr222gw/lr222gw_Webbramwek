@@ -5,8 +5,8 @@ module Api
     class UsersController < ApplicationController
       before_action do
         validateAPIKey(params[:apikey])
-        authenticateJWT
       end
+      before_filter :authenticateJWT,:only => [:destroy, :update]
       respond_to :json
 
       def index

@@ -4,8 +4,10 @@ module Api
     class EventsController < ApplicationController
       before_action do
         validateAPIKey(params[:apikey])
-        authenticateJWT
       end
+      before_filter :authenticateJWT,:only => [:destroy, :create, :update]
+
+
       respond_to :json
 
       def index

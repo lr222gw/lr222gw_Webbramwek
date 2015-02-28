@@ -5,8 +5,8 @@ module Api
       skip_before_filter  :verify_authenticity_token
       before_action do
         validateAPIKey(params[:apikey])
-        authenticateJWT
       end
+      before_filter :authenticateJWT,:only => [:destroy, :create, :update]
       respond_to :json
 
 

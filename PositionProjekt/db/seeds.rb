@@ -39,6 +39,12 @@ pos3 = Position.create(latitude:12.12332,  longitude:615.3214, name:"testPositio
 pos3.save
 pos4 = Position.create(latitude:645.12332, longitude:54.3214, name:"testPosition4 Skivan")
 pos4.save
+pos5 = Position.create(name:"mjölby")
+pos5.save
+pos6 = Position.create(name:"linköping")
+pos6.save
+pos7 = Position.create(name:"mantorp")
+pos7.save
 
 Event.delete_all
 event = Event.create(name:"Kronans Event", eventDate:"12/12/2012", desc:"En krona som har ett event, eller något")

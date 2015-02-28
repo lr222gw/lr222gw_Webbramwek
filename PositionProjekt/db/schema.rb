@@ -11,61 +11,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150225205635) do
-
-  create_table "apps", force: true do |t|
-    t.integer  "user_id"
-    t.string   "name"
-    t.string   "appKey"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "apps", ["user_id"], name: "index_apps_on_user_id"
-
-  create_table "events", force: true do |t|
-    t.integer  "position_id"
-    t.integer  "user_id"
-    t.datetime "eventDate"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "name"
-    t.string   "desc"
-  end
-
-  add_index "events", ["position_id"], name: "index_events_on_position_id"
-  add_index "events", ["user_id"], name: "index_events_on_user_id"
-
-  create_table "positions", force: true do |t|
-    t.string   "name"
-    t.float    "longitude"
-    t.float    "latitude"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "tag_on_events", force: true do |t|
-    t.integer  "tag_id"
-    t.integer  "event_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "tag_on_events", ["event_id"], name: "index_tag_on_events_on_event_id"
-  add_index "tag_on_events", ["tag_id"], name: "index_tag_on_events_on_tag_id"
-
-  create_table "tags", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "users", force: true do |t|
-    t.string   "email"
-    t.boolean  "isAdmin",         default: false
-    t.string   "password_digest"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(version: 0) do
 
 end
