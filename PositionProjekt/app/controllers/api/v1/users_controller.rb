@@ -5,6 +5,7 @@ module Api
     class UsersController < ApplicationController
       before_action do
         validateAPIKey(params[:apikey])
+        authenticateJWT
       end
       respond_to :json
 
@@ -41,17 +42,43 @@ module Api
         respond_with User.find(params[:id])
       end
 
-      # def create
-      #   respond_with User.create(params[:user])
-      # end
+      def create
+        #Kan ju inte ha krav på inloggning när man skapar användare ?? :S
+        #user_id = getUserFromAuthorizationToken
 
-      # def update
-      #   respond_with Event.update(params[:id], params[:user])
-      # end
+        #if(user_id.respond_to?(:to_i))
+          @user = User.new(email: params[:email],password: params[:password])
+          @user.save
+          respond_with :api, :v1, @user
+        #end
 
-      # def destroy
-      #   respond_with Event.destroy(params[:id])
-      # end
+
+      end
+
+      def update
+        user_id = getUserFromAuthorizationToken
+        if(user_id.respond_to?(:to_i))
+
+          @user = User.find(user_id)
+          @user.email = params[:email]
+          @user.password = params[:password]
+          @user.save
+          render json: {success: "The user was updated"}, status: :ok
+        end
+
+      end
+
+      def destroy
+        user_id = getUserFromAuthorizationToken
+        if(user_id.respond_to?(:to_i))
+
+          @user = User.find(user_id)
+          @user.destroy
+          @user.save
+          render json: {success: "The user was removed"}, status: :ok
+        end
+
+      end
 
     end
   end

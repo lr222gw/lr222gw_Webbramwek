@@ -3,6 +3,7 @@ module Api
     class PositionsController < ApplicationController
       before_action do
         validateAPIKey(params[:apikey])
+        authenticateJWT
       end
       respond_to :json
 
@@ -66,16 +67,30 @@ module Api
       end
 
       def create
-        respond_with Position.create(params[:position])
+        @pos = Position.new
+        if(!params[:latitude].nil? && !params[:longitude].nil? )
+          @pos = Position.create(name: params[:name], longitude: params[:longitude], latitude: params[:latitude])
+          @pos.save
+          #respond_with :api, :v1, @pos
+        else
+          @pos = Position.create(name: params[:name])
+          @pos.save
+          #respond_with :api, :v1, @pos <--- fungerar INTE!??!?!?
+
+        end
+
+        render json: {success: "The Position was created!", position: @pos}, status: :ok
+
       end
 
-      def update
-        respond_with Position.update(params[:id], params[:position])
-      end
-
-      def destroy
-        respond_with Position.destroy(params[:id])
-      end
+      #Vill inte att användare ska kunna ändra på platser, de får skapa men ej ändra då en skapad plats tillhör alla.
+      # def update
+      #   respond_with Position.update(params[:id], params[:position])
+      # end
+      #
+      # def destroy
+      #   respond_with Position.destroy(params[:id])
+      # end
     end
   end
 end

@@ -56,6 +56,7 @@ module Api
         respond_with :api, :v1 , @tag
       end
 
+      #Då Tag inte ägs av någon så begränsar jag att man bara kan skapa tags från apiet, inte ändra eller ta bort. Då jag inte kan begränsa det till en användare.
       def update
         respond_with Tag.update(params[:id], params[:Tag])
       end

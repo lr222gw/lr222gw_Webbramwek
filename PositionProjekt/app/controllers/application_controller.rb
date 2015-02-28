@@ -56,6 +56,31 @@ class ApplicationController < ActionController::Base
     token
   end
 
+  def getUserFromAuthorizationToken
+    if(request.headers["Authorization"].present?)
+
+      token = request.headers["Authorization"].split(" ").last
+
+      secret = Rails.application.secrets.secret_key_base
+      begin
+        JWT.decode(token, secret, "HS512", {verify_expiration: false})
+      rescue Exception
+        render json: {error: "The provided Token wasn't correct"}, status: :bad_request
+
+      else
+
+        payload = JWT.decode(token, secret, "HS512", {verify_expiration: false}) #JWT.decode("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoyMSwiZXhwIjoiMjAxNS0wMi0yOFQwOTozNDo0OS4xOTdaIn0.hR2yWysBuz3t4ft6dqZ7FYMhqo3F8M0DfuqSrDND-C48KbbUYYXpJztUkX4rzmomV9h0uXfxJ0bguVWUqLswNA", Rails.application.secrets.secret_key_base, "HS512")
+        puts payload[0]["exp"].as_json
+        if(payload[0]["exp"].to_datetime.to_i >= Time.now.to_i) # Kan sätta mer säkerhet angående om tiden är före token skapades. etc
+          return payload[0]["user_id"].to_i
+        else
+          render json: {error: "The provided Token is to old"}, status: :not_acceptable
+        end
+      end
+    end
+    return false
+  end
+
   def validate_token(token)
     puts token
     secret = Rails.application.secrets.secret_key_base
@@ -102,8 +127,12 @@ class ApplicationController < ActionController::Base
   end
 
   def currentUser
+    begin
+      @currentUser = User.find(session[:userid]) if session[:userid] #||=
+    rescue
+      redirect_to logout_path
+    end
 
-    @currentUser = User.find(session[:userid]) if session[:userid] #||=
 
   end
   def isUserOnline

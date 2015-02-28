@@ -46,7 +46,7 @@ class UsersController < ApplicationController
 
     if @user.save
       session[:userid] = @user.id
-      redirect_to users_apps_path
+      redirect_to beforeIndex_path
     else
       render :action => "new"
       #denna fungerar men den ändrar sökvägen. det suger

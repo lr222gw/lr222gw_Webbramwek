@@ -4,6 +4,7 @@ module Api
     class EventsController < ApplicationController
       before_action do
         validateAPIKey(params[:apikey])
+        authenticateJWT
       end
       respond_to :json
 
@@ -48,15 +49,49 @@ module Api
       end
 
       def create
-        respond_with Event.create(params[:event])
+        @event = Event.create(name: params[:name], eventDate: params[:eventDate], desc: params[:desc])
+        @event.user = User.find(getUserFromAuthorizationToken)
+        @event.position = Position.find(params[:positionID])
+        @event.save
+        respond_with :api, :v1, @event
       end
 
       def update
-        respond_with Event.update(params[:id], params[:event])
+
+        if(Event.where(:user_id => getUserFromAuthorizationToken, :id => params[:id]).exists?)
+          @event = Event.find(params[:id])
+          if(!params[:name].nil?)
+            @event.name = params[:name]
+          end
+          if(!params[:desc].nil?)
+            @event.desc = params[:desc]
+          end
+          if(!params[:eventDate].nil?)
+            @event.eventDate = params[:eventDate]
+          end
+
+          @event.save
+
+          #respond_with :api, :v1, @event
+          render json: {success: "Updated event!", event: @event}, status: :forbidden
+        else
+          render json: {error: "You dont have access to this event!"}, status: :forbidden
+        end
+
       end
 
       def destroy
-        respond_with Event.destroy(params[:id])
+        if(Event.where(:user_id => getUserFromAuthorizationToken, :id => params[:id]).exists?)
+
+          @event = Event.find(params[:id])
+          @event.destroy
+
+          render json: {success: "Removed event!"}, status: :forbidden
+        else
+
+          render json: {error: "You dont have access to this event!", event: @event}, status: :forbidden
+        end
+
       end
 
     end
