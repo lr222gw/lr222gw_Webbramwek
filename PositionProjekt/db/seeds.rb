@@ -39,9 +39,9 @@ pos3 = Position.create(latitude:12.12332,  longitude:615.3214, name:"testPositio
 pos3.save
 pos4 = Position.create(latitude:645.12332, longitude:54.3214, name:"testPosition4 Skivan")
 pos4.save
-pos5 = Position.create(name:"mjölby")
+pos5 = Position.create(name:"mjölby"   ,     latitude:58.3226908 ,   longitude:15.1335348)
 pos5.save
-pos6 = Position.create(name:"linköping")
+pos6 = Position.create(name:"linköping",     latitude:58.410807  ,   longitude:15.6213727)
 pos6.save
 pos7 = Position.create(name:"mantorp")
 pos7.save
