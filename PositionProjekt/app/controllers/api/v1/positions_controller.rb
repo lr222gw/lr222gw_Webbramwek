@@ -7,9 +7,10 @@ module Api
       before_filter :authenticateJWT,:only => [:destroy, :create, :update]
       respond_to :json
 
-      class Position < ::Position
-
-      end
+      # TODO: förstörde jag något nu eller var det safe att ta bort denna? :)
+      # class Position < ::Position
+      #
+      # end
 
       def index
 
