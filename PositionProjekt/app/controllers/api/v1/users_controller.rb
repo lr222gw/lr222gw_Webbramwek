@@ -39,7 +39,12 @@ module Api
       end
 
       def show
-        respond_with User.find(params[:id])
+        begin
+          respond_with User.find(params[:id])
+        rescue Exception
+          render :json => {:error => "User with ID #{params[:id]} was not found"}
+        end
+
       end
 
       def create
@@ -47,9 +52,14 @@ module Api
         #user_id = getUserFromAuthorizationToken
 
         #if(user_id.respond_to?(:to_i))
-          @user = User.new(email: params[:email],password: params[:password])
+        begin
+          @user = User.new(user_params)
           @user.save
           respond_with :api, :v1, @user
+        rescue
+          render :json => {:error => "could not create user with the data provided"}, status: :bad_request
+        end
+
         #end
 
 
@@ -57,27 +67,46 @@ module Api
 
       def update
         user_id = getUserFromAuthorizationToken
-        if(user_id.respond_to?(:to_i))
+        puts user_id  == params[:id]
+        puts params[:id]
+        puts user_id
+        puts user_id.respond_to?(:to_i)
+        if(user_id.respond_to?(:to_i) && user_id.to_i === params[:id].to_i)
 
           @user = User.find(user_id)
-          @user.email = params[:email]
-          @user.password = params[:password]
+          @user.update(user_params)
+          # @user.email = params[:email]
+          # @user.password = params[:password]
           @user.save
-          render json: {success: "The user was updated"}, status: :ok
+          render json: {success: "The user was updated", :user => @user}, status: :ok
+        else
+          render json: {error: "The user was not updated, only the user can change their data"}, status: :unauthorized
         end
+
 
       end
 
       def destroy
         user_id = getUserFromAuthorizationToken
-        if(user_id.respond_to?(:to_i))
+        if(user_id.respond_to?(:to_i) && user_id.to_i === params[:id].to_i)
+          begin
+            @user = User.find(user_id)
+            @user.destroy
+            @user.save
+            render json: {success: "The user was removed"}, status: :ok and return
+          rescue
+            render json: {error: "The user with the id #{params[:id]} was not found"}, status: :not_found and return
+          end
 
-          @user = User.find(user_id)
-          @user.destroy
-          @user.save
-          render json: {success: "The user was removed"}, status: :ok
+        else
+          render json: {error: "The user was not removed, only a user can delete itself"}, status: :unauthorized and return
         end
 
+      end
+
+      private
+      def user_params
+        params.permit(:email, :password)
       end
 
     end

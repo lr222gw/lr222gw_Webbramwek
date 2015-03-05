@@ -45,33 +45,46 @@ module Api
       end
 
       def show
-        event = Event.find(params[:id]);
+        begin
+          event = Event.find(params[:id]);
+        rescue
+          render :json => {:error => "Event with ID #{params[:id]} was not found"} and return
+        end
 
         respond_with event
       end
 
       def create
-        @event = Event.create(name: params[:name], eventDate: params[:eventDate], desc: params[:desc])
-        @event.user = User.find(getUserFromAuthorizationToken)
-        @event.position = Position.find(params[:positionID])
-        @event.save
-        respond_with :api, :v1, @event
+        begin
+          @event = Event.create(event_params)
+          @event.user = User.find(getUserFromAuthorizationToken)
+          begin
+            @event.position = Position.find(params[:positionID])
+          rescue
+            render :json => {:error => "could not found Position for event"}, status: :bad_request
+          end
+          @event.save
+          respond_with :api, :v1, @event
+        rescue
+          render :json => {:error => "Could not create Event"}, status: :bad_request
+        end
+
       end
 
       def update
 
         if(Event.where(:user_id => getUserFromAuthorizationToken, :id => params[:id]).exists?)
           @event = Event.find(params[:id])
-          if(!params[:name].nil?)
-            @event.name = params[:name]
-          end
-          if(!params[:desc].nil?)
-            @event.desc = params[:desc]
-          end
-          if(!params[:eventDate].nil?)
-            @event.eventDate = params[:eventDate]
-          end
-
+          # if(!params[:name].nil?)
+          #   @event.name = params[:name]
+          # end
+          # if(!params[:desc].nil?)
+          #   @event.desc = params[:desc]
+          # end
+          # if(!params[:eventDate].nil?)
+          #   @event.eventDate = params[:eventDate]
+          # end
+          @event.update(event_params)
           @event.save
 
           #respond_with :api, :v1, @event
@@ -94,6 +107,11 @@ module Api
           render json: {error: "You dont have access to this event!", event: @event}, status: :forbidden
         end
 
+      end
+
+      private
+      def event_params
+        params.permit(:name, :desc, :eventDate)
       end
 
     end

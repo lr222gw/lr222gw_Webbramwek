@@ -42,27 +42,58 @@ module Api
       end
 
       def show
-        respond_with Tag.find(params[:id])
+        begin
+          respond_with Tag.find(params[:id])
+        rescue
+          render :json => {:error => "Tag with id #{params[:id]} was not found"}
+        end
+
       end
 
       def create
         # Vi skapar en ny Tag, Vi berättar att vi ska skicka in "name" vilket vi får från parametern!
-        @tag = Tag.new(name: params[:name])
+        begin
+          @tag = Tag.new(tag_params)
 
-        # Nu gäller det bara att spara ner den!
-        @tag.save
+          # Nu gäller det bara att spara ner den!
+          @tag.save
 
-        #När vi kör respond så berättar vi först vilket namespace vi ska responda till(?), sen anger vi vad som ska respondas: @tag <-DEN DEN! DEN! :D
-        respond_with :api, :v1 , @tag
+          #När vi kör respond så berättar vi först vilket namespace vi ska responda till(?), sen anger vi vad som ska respondas: @tag <-DEN DEN! DEN! :D
+          respond_with :api, :v1 , @tag
+        rescue
+          render :json => {:error => "Could not create tag"}
+        end
+
       end
 
       #Då Tag inte ägs av någon så begränsar jag att man bara kan skapa tags från apiet, inte ändra eller ta bort. Då jag inte kan begränsa det till en användare.
       def update
-        respond_with Tag.update(params[:id], params[:Tag])
+        begin
+          tag = Tag.find(params[:id]);
+          respond_with tag.update(tag_params)
+        rescue
+          render :json => {:error => "Tag with id #{params[:id]} was not found"}, status: :not_found
+        end
+
       end
 
       def destroy
-        respond_with Tag.destroy(params[:id])
+        begin
+          user = currentUser
+          if(user.isAdmin?)
+            respond_with Tag.destroy(params[:id])
+          else
+            render :json => {:error => "user is not permitted to remove tags"}, status: :unauthorized
+          end
+        rescue
+          render :json => {:error => "Tag with id #{params[:id]} was not found"}, status: :not_found
+        end
+
+      end
+
+      private
+      def tag_params
+        params.permit(:name)
       end
 
     end

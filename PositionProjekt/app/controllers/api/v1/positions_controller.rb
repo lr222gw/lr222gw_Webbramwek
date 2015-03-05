@@ -49,7 +49,12 @@ module Api
       end
 
       def show
+        begin
         position = Position.find(params[:id]);
+        rescue
+          render :json => {:error => "Position with ID #{params[:id]} was not found" } and return
+        end
+
         if(params[:radius].nil?)
           radius = 20
         else
@@ -64,23 +69,28 @@ module Api
                        :nearbys => position.nearbys(radius) #Tycker nearbys fungerar underligt.. men den "fungerar" :S
                    }
           }
+
+
         end
       end
 
       def create
-        @pos = Position.new
-        if(!params[:latitude].nil? && !params[:longitude].nil? )
-          @pos = Position.create(name: params[:name], longitude: params[:longitude], latitude: params[:latitude])
-          @pos.save
-          #respond_with :api, :v1, @pos
-        else
-          @pos = Position.create(name: params[:name])
-          @pos.save
-          #respond_with :api, :v1, @pos <--- fungerar INTE!??!?!?
+        begin
+          @pos = Position.new
+          if(!params[:latitude].nil? && !params[:longitude].nil? )
+            @pos = Position.create(name: params[:name], longitude: params[:longitude], latitude: params[:latitude])
+            @pos.save
+            #respond_with :api, :v1, @pos
+          else
+            @pos = Position.create(name: params[:name])
+            @pos.save
+            #respond_with :api, :v1, @pos <--- fungerar INTE!??!?!?
 
+          end
+          render json: {success: "The Position was created!", position: @pos}, status: :ok
+        rescue
+          render json: {error: "Could not create position!"}, status: :bad_request
         end
-
-        render json: {success: "The Position was created!", position: @pos}, status: :ok
 
       end
 
