@@ -34,8 +34,8 @@ module Api
                          :total_entries => tags.total_entries,
                          :entries => tags,
                          :next_page => nextpage,
-                         :prev_page => prevpage
-
+                         :prev_page => prevpage,
+                         status: :ok
                      }
           }
         end
@@ -45,7 +45,7 @@ module Api
         begin
           respond_with Tag.find(params[:id])
         rescue
-          render :json => {:error => "Tag with id #{params[:id]} was not found"}
+          render :json => {:error => "Tag with id #{params[:id]} was not found", status: :bad_request}
         end
 
       end
@@ -61,7 +61,7 @@ module Api
           #När vi kör respond så berättar vi först vilket namespace vi ska responda till(?), sen anger vi vad som ska respondas: @tag <-DEN DEN! DEN! :D
           respond_with :api, :v1 , @tag
         rescue
-          render :json => {:error => "Could not create tag"}
+          render :json => {:error => "Could not create tag", status: :bad_request}
         end
 
       end
@@ -72,7 +72,7 @@ module Api
           tag = Tag.find(params[:id]);
           respond_with tag.update(tag_params)
         rescue
-          render :json => {:error => "Tag with id #{params[:id]} was not found"}, status: :not_found
+          render :json => {:error => "Tag with id #{params[:id]} was not found", status: :not_found}
         end
 
       end
@@ -83,10 +83,10 @@ module Api
           if(user.isAdmin?)
             respond_with Tag.destroy(params[:id])
           else
-            render :json => {:error => "user is not permitted to remove tags"}, status: :unauthorized
+            render :json => {:error => "user is not permitted to remove tags", status: :unauthorized}
           end
         rescue
-          render :json => {:error => "Tag with id #{params[:id]} was not found"}, status: :not_found
+          render :json => {:error => "Tag with id #{params[:id]} was not found", status: :not_found}
         end
 
       end

@@ -31,7 +31,8 @@ module Api
                        :total_entries => users.total_entries,
                        :entries => users,
                        :next_page => nextpage,
-                       :prev_page => prevpage
+                       :prev_page => prevpage,
+                       status: :ok
 
                    }
           }
@@ -42,7 +43,7 @@ module Api
         begin
           respond_with User.find(params[:id])
         rescue Exception
-          render :json => {:error => "User with ID #{params[:id]} was not found"}
+          render :json => {:error => "User with ID #{params[:id]} was not found", status: :bad_request}
         end
 
       end
@@ -55,9 +56,10 @@ module Api
         begin
           @user = User.new(user_params)
           @user.save
-          respond_with :api, :v1, @user
+          #respond_with :api, :v1, @user
+            render :json => {:success => "User was created", :user => @user, status: :ok}
         rescue
-          render :json => {:error => "could not create user with the data provided"}, status: :bad_request
+          render :json => {:error => "could not create user with the data provided", status: :bad_request}
         end
 
         #end
@@ -78,9 +80,9 @@ module Api
           # @user.email = params[:email]
           # @user.password = params[:password]
           @user.save
-          render json: {success: "The user was updated", :user => @user}, status: :ok
+          render json: {success: "The user was updated", :user => @user, status: :ok}
         else
-          render json: {error: "The user was not updated, only the user can change their data"}, status: :unauthorized
+          render json: {error: "The user was not updated, only the user can change their data", status: :unauthorized}
         end
 
 
@@ -93,13 +95,13 @@ module Api
             @user = User.find(user_id)
             @user.destroy
             @user.save
-            render json: {success: "The user was removed"}, status: :ok and return
+            render json: {success: "The user was removed", status: :ok} and return
           rescue
-            render json: {error: "The user with the id #{params[:id]} was not found"}, status: :not_found and return
+            render json: {error: "The user with the id #{params[:id]} was not found", status: :not_found} and return
           end
 
         else
-          render json: {error: "The user was not removed, only a user can delete itself"}, status: :unauthorized and return
+          render json: {error: "The user was not removed, only a user can delete itself", status: :unauthorized} and return
         end
 
       end

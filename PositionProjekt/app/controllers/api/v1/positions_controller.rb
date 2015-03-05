@@ -41,7 +41,8 @@ module Api
                        :total_entries => position.total_entries,
                        :entries => position,
                        :next_page => nextpage,
-                       :prev_page => prevpage
+                       :prev_page => prevpage,
+                       status: :ok
 
                    }
           }
@@ -52,7 +53,7 @@ module Api
         begin
         position = Position.find(params[:id]);
         rescue
-          render :json => {:error => "Position with ID #{params[:id]} was not found" } and return
+          render :json => {:error => "Position with ID #{params[:id]} was not found", status: :bad_request } and return
         end
 
         if(params[:radius].nil?)
@@ -66,7 +67,8 @@ module Api
           format.json {
             render :json => {
                        :position => position,
-                       :nearbys => position.nearbys(radius) #Tycker nearbys fungerar underligt.. men den "fungerar" :S
+                       :nearbys => position.nearbys(radius), #Tycker nearbys fungerar underligt.. men den "fungerar" :S
+                       status: :ok
                    }
           }
 
@@ -78,7 +80,7 @@ module Api
         begin
           @pos = Position.new
           if(!params[:latitude].nil? && !params[:longitude].nil? )
-            @pos = Position.create(name: params[:name], longitude: params[:longitude], latitude: params[:latitude])
+            @pos = Position.create(position_params)
             @pos.save
             #respond_with :api, :v1, @pos
           else
@@ -87,11 +89,17 @@ module Api
             #respond_with :api, :v1, @pos <--- fungerar INTE!??!?!?
 
           end
-          render json: {success: "The Position was created!", position: @pos}, status: :ok
+          render json: {success: "The Position was created!", position: @pos, status: :ok}
         rescue
-          render json: {error: "Could not create position!"}, status: :bad_request
+          render json: {error: "Could not create position!", status: :bad_request}
         end
 
+      end
+
+      private
+
+      def position_params
+        params.permit(:name, :longitude, :latitude)
       end
 
       #Vill inte att användare ska kunna ändra på platser, de får skapa men ej ändra då en skapad plats tillhör alla.
