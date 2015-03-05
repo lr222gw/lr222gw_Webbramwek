@@ -1,0 +1,4 @@
+Filerna kan laddas in i Postman Packaged app... (ett chromeexteension..)
+
+När den är installerad sen följ denna guide:
+http://getpostman.com/docs/migration

@@ -3,10 +3,12 @@ class UsersController < ApplicationController
   before_action :currentUserIsAdmin, only: [:backendIndex]
 
 
-  def index
-    if !currentUser.nil?
-      redirect_to users_apps_path
-    end
+  def index #Denna funktion verkar inte köras? hmmm
+    currentUser
+
+      puts currentUser
+      #redirect_to(:action => :users_apps_path)
+
   end
 
   def backendloginindex
@@ -19,18 +21,25 @@ class UsersController < ApplicationController
 
   def backendlogin
     user = User.find_by_email(params[:email])
+
+    begin
     if user.isAdmin == true
       handleUserLogin true
     else
       flash[:notice] = "Du är ju inte admin, gå härifrån... din jävel :<"
       render :action => "backendloginindex"
     end
+    rescue Exception
+      flash[:notice] = "Du är ju inte admin, gå härifrån... din jävel :<"
+      render :action => "backendloginindex"
+    end
+
 
   end
 
   def logout
     session[:userid] = nil
-    redirect_to root_path
+    redirect_to(root_path)
   end
 
   def login

@@ -7,7 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 User.delete_all
-user = User.create(email:"test@test.se",password:"123")
+user = User.create(email:"test@test.se",password:"123", isAdmin:true)
 user.save
 user2 = User.create(email:"tester2@test.se",password:"123")
 user2.save

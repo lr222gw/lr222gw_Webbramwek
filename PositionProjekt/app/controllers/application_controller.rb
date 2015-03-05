@@ -130,7 +130,7 @@ class ApplicationController < ActionController::Base
     begin
       @currentUser = User.find(session[:userid]) if session[:userid] #||=
     rescue
-      redirect_to logout_path
+      #redirect_to(:action => :logout) and return
     end
 
 
