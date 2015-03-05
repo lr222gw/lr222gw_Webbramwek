@@ -39,7 +39,11 @@ module Api
                         :entries => events,
                        :next_page => nextpage,
                        :prev_page => prevpage,
+                       :links => [
+                           :url  => Rails.application.routes.url_helpers.api_v1_event_path(events)
+                       ],
                        status: :ok
+
                    }
           }
         end
