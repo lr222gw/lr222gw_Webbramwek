@@ -12,9 +12,21 @@ app.controller('MapController', function($scope){
        map = evtMap;
     });
 
-    vm.fillWithEvents = function(){
+    vm.markEventOnMap = function(event){
+        if(myGlobals.currentMarker !== null){
+            myGlobals.currentMarker.setMap(null);
+        }
 
-    };
+        var latlng = {
+            lat:event.position.latitude,
+            lng:event.position.longitude
+        };
+        console.log(latlng)
+
+        myGlobals.currentMarker = new google.maps.Marker({position: latlng, map: map});
+
+        map.panTo(latlng)
+    }
 
 });
 
@@ -42,6 +54,7 @@ app.directive("allEventsbox", function(){
         templateUrl : "shared/event/allEventboxTemplate.html",
         controller : ["$http", "API",function($http, API){
             var events = {};
+            var activeEvent = {};
             var EventCtrl = this;
 
             var promise = $http.get("http://127.0.0.1:3000/api/v1/events?" + API.apikey);
@@ -54,6 +67,11 @@ app.directive("allEventsbox", function(){
             promise.error(function(data){
                 console.log(data);
             });
+
+            this.setActiveEvent = function(event){
+                EventCtrl.activeEvent = event;
+            }
+
         }],
         controllerAs: "eventCtrl"
     }
@@ -61,9 +79,13 @@ app.directive("allEventsbox", function(){
 
 
 app.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.otherwise({redirectTo: '/view1'});//DIDi
+    $routeProvider.otherwise({redirectTo: '/view1'});
 }]);
 
 app.constant("API", { //Inte bra att ha nyckeln på klienten egentligen
-    'apikey' : "apikey=dGVzdHRlc3RAdGVzdC5zZSQyYSQxMCRDYXNSd29JN2FuTC41RklRaDJBTGNP"
+    'apikey' : "apikey=c2hpdHR5c2hpdHRlc3RAdGVzdC5zZSQyYSQxMCRtUWNObW03Z05WWkc3MFBZaXpaN0Mu"
 });
+
+var myGlobals = {
+    currentMarker : null
+};

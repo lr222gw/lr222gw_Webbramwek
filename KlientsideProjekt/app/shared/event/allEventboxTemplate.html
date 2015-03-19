@@ -1,6 +1,17 @@
 <div > <!-- ng-controller="EventController as eventCtrl" -->
-    <div class="eventbox" ng-repeat="event in eventCtrl.events">
+    <div class="eventbox" ng-repeat="event in eventCtrl.events" ng-click="MC.markEventOnMap(event); eventCtrl.setActiveEvent(event)">
         <h3>{{event.name}}</h3>
         <h4>{{event.position.name}}</h4>
+    </div>
+    <div ng-hide="eventCtrl.activeEvent.name === undefined">
+        <h2>Event detaljer</h2>
+        <h3>Namn: {{eventCtrl.activeEvent.name}}</h3>
+        <h3>{{eventCtrl.activeEvent.eventDate | date}}</h3>
+        <div><p>Beskrivning: {{eventCtrl.activeEvent.desc}}</p></div>
+        <div>Taggar:
+            <a ng-repeat="tagg in eventCtrl.activeEvent.tag_on_events">
+                {{tagg.tag.name}}
+            </a>
+        </div>
     </div>
 </div>
