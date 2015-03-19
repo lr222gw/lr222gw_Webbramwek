@@ -17,17 +17,19 @@
     <body>
 
 
-        <div ng-controller="EventController as eventCtrl">
 
-            <div data-ng-controller="MapController as MC">
-                <map center="current-location" zoom="8" class="map"></map>
-            </div>
 
-            <li ng-repeat="event in eventCtrl.events">
-                {{event.name}}
-            </li>
-
+        <div data-ng-controller="MapController as MC">
+            <map center="current-location" zoom="8" class="map"></map>
         </div>
+
+        <!--<div ng-controller="EventController as eventCtrl">
+            <div class="eventbox" ng-repeat="event in eventCtrl.events">
+                <h3>{{event.name}}</h3>
+                <h4>{{event.position.name}}</h4>
+            </div>
+        </div>-->
+        <all-eventsbox></all-eventsbox>
 
 
         <script src="bower_components/angular/angular.js"></script>

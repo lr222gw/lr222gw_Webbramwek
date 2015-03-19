@@ -18,7 +18,7 @@ app.controller('MapController', function($scope){
 
 });
 
-app.controller("EventController", ["$http", "API",function($http, API){
+/*app.controller("EventController", ["$http", "API",function($http, API){
 
     var events = {};
     var EventCtrl = this;
@@ -27,13 +27,37 @@ app.controller("EventController", ["$http", "API",function($http, API){
 
     promise.success(function(data){
         EventCtrl.events = data.entries;
+        console.log(EventCtrl.events)
     });
 
     promise.error(function(data){
         console.log(data);
     });
 
-}]);
+}]);*/
+
+app.directive("allEventsbox", function(){
+    return {
+        restrict: "E",
+        templateUrl : "shared/event/allEventboxTemplate.html",
+        controller : ["$http", "API",function($http, API){
+            var events = {};
+            var EventCtrl = this;
+
+            var promise = $http.get("http://127.0.0.1:3000/api/v1/events?" + API.apikey);
+
+            promise.success(function(data){
+                EventCtrl.events = data.entries;
+                console.log(EventCtrl.events)
+            });
+
+            promise.error(function(data){
+                console.log(data);
+            });
+        }],
+        controllerAs: "eventCtrl"
+    }
+});
 
 
 app.config(['$routeProvider', function($routeProvider) {
