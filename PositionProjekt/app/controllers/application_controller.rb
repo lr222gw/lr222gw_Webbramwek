@@ -12,6 +12,11 @@ class ApplicationController < ActionController::Base
     puts apikey
     if(App.where(:appKey => apikey).exists?)
       #Allting är som det ska och inget behöver avbrytas...
+      # vi tillåter CORS...
+      headers['Access-Control-Allow-Origin'] = '*'
+      headers['Access-Control-Allow-Methods'] = 'GET'
+      headers['Access-Control-Request-Method'] = '*'
+      headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
     else
       render json: {error: "API-key is invalid..."}, status: :forbidden and return
     end
@@ -37,7 +42,7 @@ class ApplicationController < ActionController::Base
         render json: {error: "The provided Token wasn't correct"}, status: :bad_request
 
       end
-
+      headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS' #Tillåt alla methods...
     else
       render json: {error: "Need to include the authroziation Header"}, status: :forbidden
     end
