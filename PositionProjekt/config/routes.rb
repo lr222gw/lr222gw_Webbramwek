@@ -29,6 +29,7 @@ Rails.application.routes.draw do
 
 
       put 'uppdateExtra' => 'events#updateWithExtra', as: :updateWithExtra
+      post 'createExtra' => 'events#createWithExtra', as: :createWithExtra
       post 'login' => "users#login", as: :api_Login
 
       resources :tags

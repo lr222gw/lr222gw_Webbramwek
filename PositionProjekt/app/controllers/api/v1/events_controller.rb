@@ -4,8 +4,10 @@ module Api
     class EventsController < ApplicationController
       before_action do
         validateAPIKey(params[:apikey])
+
       end
-      before_filter :authenticateJWT,:only => [:destroy, :create, :update]
+      before_action :authenticateJWT, only: [:destroy, :updateWithExtra, :createWithExtra, :create, :update]
+      #before_filter :authenticateJWT,only: [:destroy, :updateWithExtra, :create, :update]
 
 
       respond_to :json
@@ -74,6 +76,67 @@ module Api
           render :json => {:error => "Could not create Event"}, status: :bad_request
         end
 
+      end
+
+      def createWithExtra
+        json_params = ActionController::Parameters.new( JSON.parse(request.body.read) )
+        puts json_params["event"]
+        if(Event.where(:user_id => getUserFromAuthorizationToken).exists?)
+
+          @event = Event.new
+
+          @event.name = json_params["event"]["name"]
+          #puts json_params["event"]["name"]
+          pos = Position.create("name" => json_params["event"]["position"]["name"])
+          pos.save
+          puts pos.errors.messages
+          @event.position = pos;
+          @event.desc = json_params["event"]["desc"]
+          @event.eventDate = json_params["event"]["eventDate"]
+          user = User.find(getUserFromAuthorizationToken);
+          puts json_params["event"]["eventDate"]
+
+          @event.user = user
+
+          @event.save
+          puts @event.errors.messages
+          puts json_params["event"]["position"]["name"]
+
+          tagArr = json_params["event"]["tags"].split(", ");
+          puts tagArr
+
+
+          tagArr.each do |tagg|
+
+            if(Tag.where("name" => tagg).exists?)
+              puts "hell SON"
+              #puts TagOnEvent.where("name" === tagg, "event_id" === @event.id)[0]
+              #@event.tag_on_events <<
+              puts tagg
+              existingTag = Tag.where("name" => tagg)[0]
+              puts existingTag.name
+              puts @event
+              puts @event.id
+              toe = TagOnEvent.create("tag" => existingTag, "tag_id" => existingTag.id, "event" => @event, "event_id" => @event.id)#TagOnEvent.where("name" === tagg, "event_id" === @event.id)[0]
+              toe.save
+              puts toe.errors.messages
+
+            else
+              tag = Tag.create("name" => tagg)
+              tag.save
+              toe = TagOnEvent.create("tag" => tag, "tag_id" => tag.id, "event" => @event, "event_id" => @event.id)
+              @event.tag_on_events << toe
+            end
+
+          end
+
+          @event.save
+
+          #respond_with :api, :v1, @event
+          render json: {success: "Created event!", event: @event}, status: :ok and return
+        end
+
+        render json: {error: "illegal user!"}, status: :forbidden and return
       end
 
       def updateWithExtra
@@ -182,6 +245,7 @@ module Api
       end
 
       def destroy
+        puts "FAN "
         if(Event.where(:user_id => getUserFromAuthorizationToken, :id => params[:id]).exists?)
 
           @event = Event.find(params[:id])

@@ -1,4 +1,4 @@
-<div ng-init="editMode = false"> <!-- ng-controller="EventController as eventCtrl" -->
+<div ng-init="editMode = false; createMode=false"> <!-- ng-controller="EventController as eventCtrl" -->
     Search: <input id="theSearchBox" ng-model="query">
 
     <div class="eventbox" ng-repeat="event in eventCtrl.events | filter: search " ng-click="MC.markEventOnMap(event); eventCtrl.setActiveEvent(event);">
@@ -8,6 +8,20 @@
         <input type="button" value="Redigera" ng-show="eventCtrl.currentUserOwnsEvent(event)" ng-click="eventCtrl.setEditMode(true, event)">
 
     </div>
+    <input type="button" value="Skapa event" ng-click="createMode= true; editMode= false">
+    <div ng-show="createMode == true && editMode == false">
+        <h2>Skapa Event</h2>
+        <h3>Namn: <input ng-model="eventName" type="text" value=""></h3>
+        <h3>Plats: <input ng-model="positionName" type="text" value=""></h3>
+        <h3>Datum: <input ng-model="date" type="date" value=""></h3>
+        <div>Beskrivning:  <textarea ng-model="desc"></textarea></div>
+        <div class="tagg">Taggar:
+            <textarea ng-model="tags" ></textarea>
+        </div>
+        <input type="button" value="Spara" ng-click="eventCtrl.saveEvent()">
+        <input type="button" value="Avbryt" ng-click="createMode= false">
+    </div>
+
     <div ng-show="eventCtrl.activeEvent.name !== undefined && editMode == true">
         <h2>Redigera Event</h2>
         <h3>Namn: <input ng-model="eventName" type="text" value="{{eventCtrl.activeEvent.name}}"></h3>
@@ -16,12 +30,9 @@
         <div>Beskrivning:  <textarea ng-model="desc"></textarea></div>
         <div class="tagg">Taggar:
                 <textarea ng-model="tags" ></textarea>
-                <!--<a ng-repeat="tagg in eventCtrl.activeEvent.tag_on_events" ng-click="eventCtrl.setSearch(tagg.tag)">
-
-                    {{tagg.tag.name}}
-                </a>-->
         </div>
         <input type="button" value="Spara" ng-click="eventCtrl.saveEdit()">
+        <input type="button" value="Radera skiten" ng-click="eventCtrl.deleteEvent()">
         <input type="button" value="Avbryt redigering" ng-click="eventCtrl.setEditMode(false)">
     </div>
 
