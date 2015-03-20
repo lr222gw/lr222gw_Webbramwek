@@ -41,10 +41,10 @@ module Api
                        :prev_page => prevpage,
                        :links => [
                            :url  => Rails.application.routes.url_helpers.api_v1_event_path(events)
-                       ],
-                       status: :ok
+                       ]
 
-                   }
+                   },
+                   status: :ok
           }
         end
       end
@@ -53,7 +53,7 @@ module Api
         begin
           event = Event.find(params[:id]);
         rescue
-          render :json => {:error => "Event with ID #{params[:id]} was not found", status: :bad_request} and return
+          render :json => {:error => "Event with ID #{params[:id]} was not found"}, status: :bad_request and return
         end
 
         respond_with event
@@ -66,12 +66,12 @@ module Api
           begin
             @event.position = Position.find(params[:positionID])
           rescue
-            render :json => {:error => "could not found Position for event", status: :bad_request}
+            render :json => {:error => "could not found Position for event"}, status: :bad_request
           end
           @event.save
           respond_with :api, :v1, @event
         rescue
-          render :json => {:error => "Could not create Event", status: :bad_request}
+          render :json => {:error => "Could not create Event"}, status: :bad_request
         end
 
       end
@@ -93,9 +93,9 @@ module Api
           @event.save
 
           #respond_with :api, :v1, @event
-          render json: {success: "Updated event!", event: @event, status: :forbidden}
+          render json: {success: "Updated event!", event: @event}, status: :forbidden
         else
-          render json: {error: "You dont have access to this event!", status: :forbidden}
+          render json: {error: "You dont have access to this event!"}, status: :forbidden
         end
 
       end
@@ -106,10 +106,10 @@ module Api
           @event = Event.find(params[:id])
           @event.destroy
 
-          render json: {success: "Removed event!", status: :ok}
+          render json: {success: "Removed event!"}, status: :ok
         else
 
-          render json: {error: "You dont have access to this event!", event: @event, status: :forbidden}
+          render json: {error: "You dont have access to this event!", event: @event}, status: :forbidden
         end
 
       end

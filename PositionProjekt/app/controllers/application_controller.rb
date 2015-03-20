@@ -20,7 +20,14 @@ class ApplicationController < ActionController::Base
     else
       render json: {error: "API-key is invalid..."}, status: :forbidden and return
     end
+  end
 
+  def allowPost()
+    puts "SHIIIIIT"
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, GET'
+    headers['Access-Control-Request-Method'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   end
 
   def createJWT(user)

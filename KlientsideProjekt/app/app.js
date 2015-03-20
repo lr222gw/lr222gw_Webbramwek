@@ -39,7 +39,7 @@ app.controller('LoginController', function($http, $scope, $rootScope, flash, API
         var data = {'email' : $scope.email, 'password' : $scope.password};
             //Datan vi skickar med är anpassad efter vad vårt api kräver, i detta fall inloggningsuppgifter
 
-        var url = API.baseUrl + "tags?" + API.apikey;
+        var url = API.baseUrl + "login?" + API.apikey;
             //URLn som vi ska till på vårt api för att få tillbaka en inloggnings token (JWT)
 
         var config = {
@@ -52,7 +52,7 @@ app.controller('LoginController', function($http, $scope, $rootScope, flash, API
         var promise = $http.post(url, data, config); //skickar med datan vi strukturerat..
 
         promise.success(function(data, status, headers, config){
-
+            console.log(data)
             //Funktionen som anropas om promise gick bra!
             $rootScope.token = data.auth_token;//gör nyckeln tillgänglig i programmet
             $rootScope.isLoggedIn = true; //isLoggedIn = true pga lyckad inlogg
@@ -61,6 +61,7 @@ app.controller('LoginController', function($http, $scope, $rootScope, flash, API
         promise.error(function(data, status, headers, config){
             $rootScope.token = "illegal token"; //ogiltig nyckel...
             $rootScope.isLoggedIn = false; //false pga misslyckad inlogg
+            console.log(data)
         });
     }
 });
