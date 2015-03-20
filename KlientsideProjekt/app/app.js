@@ -30,13 +30,25 @@ app.controller('MapController', function($scope){
 
 });
 
-app.controller('LoginController', function($http, $scope, $rootScope, flash, API){
+app.controller('LoginController', function($http, $scope, $rootScope, flash, API, jwtHelper){
     var vm = this;
-    $rootScope.isLoggedIn = false;
+    $rootScope.isLoggedIn = localStorage["loggedIn"] !==  false ? localStorage["loggedIn"] : false;
+
+    vm.isOnline = function(){
+        return $rootScope.isLoggedIn;
+    }
+    vm.logout =function() {
+        $rootScope.isLoggedIn = false;
+        $rootScope.token = "illegal token";
+        localStorage["loggedIn"] = false;
+        localStorage["jwtToken"] = "illegal token";
+        localStorage["userId"] = null;
+        flash.success = "Utloggning lyckades!";
+    }
 
     vm.login =function(){
         console.log($scope.email + $scope.password)
-        var data = {'email' : $scope.email, 'password' : $scope.password};
+        var data = {'email' : $scope.email, 'password' : $scope.password}; //VET INTE HUR MAN KOMMER ÅT DATA FRÅN SERVERN SEN!!!!!
             //Datan vi skickar med är anpassad efter vad vårt api kräver, i detta fall inloggningsuppgifter
 
         var url = API.baseUrl + "login?" + API.apikey;
@@ -45,7 +57,8 @@ app.controller('LoginController', function($http, $scope, $rootScope, flash, API
         var config = {
             headers : {
                 "X-APIkey" : API.apikey,
-                "Accept" : "application/json" //responsedatan vi vill ha...
+                "Accept" : "application/json", //responsedatan vi vill ha...
+                'email' : $scope.email, 'password' : $scope.password
             }
         }
 
@@ -54,14 +67,21 @@ app.controller('LoginController', function($http, $scope, $rootScope, flash, API
         promise.success(function(data, status, headers, config){
             console.log(data)
             //Funktionen som anropas om promise gick bra!
-            $rootScope.token = data.auth_token;//gör nyckeln tillgänglig i programmet
+            $rootScope.token = data.jwt;//gör nyckeln tillgänglig i programmet
             $rootScope.isLoggedIn = true; //isLoggedIn = true pga lyckad inlogg
-            flash.success = "Inloggning lyckades";
+            flash.success = "Inloggning lyckades!";
+            localStorage["loggedIn"] = true;
+            localStorage["userId"] = jwtHelper.decodeToken(data.jwt).user_id;
+            localStorage["jwtToken"] = data.jwt;
         });
         promise.error(function(data, status, headers, config){
             $rootScope.token = "illegal token"; //ogiltig nyckel...
             $rootScope.isLoggedIn = false; //false pga misslyckad inlogg
             console.log(data)
+            flash.error = data.error;
+            localStorage["loggedIn"] = false;
+            localStorage["userId"] = null;
+            localStorage["jwtToken"] = "illegal token";
         });
     }
 });
@@ -70,11 +90,13 @@ app.directive("allEventsbox", function(){
     return {
         restrict: "E",
         templateUrl : "shared/event/allEventboxTemplate.html",
-        controller : ["$http", "API", "$scope" , "flash", function($http, API, $scope, flash){
+        controller : ["$http", "API", "$scope" , "flash", "$filter", function($http, API, $scope, flash, $filter){
             var events = [];
             var activeEvent = {};
+
             var EventCtrl = this;
             var tags = [];
+            this.prevEvent = null;
 
             var promise = $http.get(API.baseUrl + "events?" + API.apikey);
 
@@ -108,7 +130,29 @@ app.directive("allEventsbox", function(){
             });
 
             this.setActiveEvent = function(event){
+                if(myGlobals.eventToEdit !== undefined){
+                    if( myGlobals.eventToEdit.id !== event.id){
+                        $scope.editMode = false;
+                    }
+                }else{$scope.editMode = false;}
+
                 EventCtrl.activeEvent = event;
+
+
+            }
+            this.saveEdit = function(){
+                console.log(vm.eventName)
+            }
+
+            this.getTags = function(event){
+                var tagsArr= [];
+                for(var i = 0; i < event.tag_on_events.length; i++){
+                    tagsArr.push(event.tag_on_events[i].tag.name);
+                }
+
+                var arrayString = tagsArr.join(", ");
+                return arrayString;
+
             }
 
             this.setSearch = function(tag){
@@ -117,6 +161,25 @@ app.directive("allEventsbox", function(){
                 }else{
                     $scope.query = "#"+ tag.name;
                 }
+            }
+
+            this.setEditMode = function(mode, event){
+                $scope.editMode = mode;
+                if(event !== undefined){
+                    if(event !== null){
+                        myGlobals.eventToEdit = event;
+
+                        $scope.eventName = event.name
+                        $scope.tags = this.getTags(event)
+                        $scope.desc = event.desc
+                        $scope.positionName = event.position.name
+                        $scope.date = $filter("date")(event.eventDate,  'yyyy-MM-dd')
+                    }
+                }
+            }
+
+            this.currentUserOwnsEvent = function(event){
+                return event.user_id.toString() === localStorage['userId'];
             }
 
             $scope.search = function (event){
@@ -179,5 +242,6 @@ app.constant("API", { //Inte bra att ha nyckeln på klienten egentligen
 });
 
 var myGlobals = {
-    currentMarker : null
+    currentMarker : null,
+    eventToEdit : undefined
 };

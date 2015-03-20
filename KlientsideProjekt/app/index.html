@@ -32,13 +32,16 @@
             <all-eventsbox></all-eventsbox>
         </div>
 
-        <div class="loginbox" ng-controller="LoginController as loginCtrl">
-            <form name="loginform" ng-submit="loginCtrl.login()">
+        <div class="loginbox" ng-controller="LoginController as loginCtrl" >
+            <form name="loginform" ng-submit="loginCtrl.login()" ng-hide="loginCtrl.isOnline()">
                 <label>Email: </label>
                 <input type="email" ng-model="email">
                 <label>Lösenord: </label>
                 <input type="password" ng-model="password">
                 <input type="submit" value="Logga in">
+            </form>
+            <form name="logoutform" ng-submit="loginCtrl.logout()" ng-show="loginCtrl.isOnline()">
+                <input type="submit" value="Logga ut">
             </form>
         </div>
 

@@ -22,7 +22,8 @@ module Api
           if !@user
 
             if request.headers["email"] == nil
-              render :json => {:error => "User must provive Email"}, status: :bad_request and return
+   
+              render :json => {:error => "User must provide Email"}, status: :bad_request and return
             end
 
             render :json => {:error => "User with Email #{request.headers["email"]} was not found"}, status: :bad_request and return

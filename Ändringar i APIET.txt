@@ -1,2 +1,4 @@
 
 -lägger till funktionalitet för inloggning genom apiet...
+
+-fixed broken response

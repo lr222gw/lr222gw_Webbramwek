@@ -1,18 +1,37 @@
-<div > <!-- ng-controller="EventController as eventCtrl" -->
+<div ng-init="editMode = false"> <!-- ng-controller="EventController as eventCtrl" -->
     Search: <input id="theSearchBox" ng-model="query">
 
-    <div class="eventbox" ng-repeat="event in eventCtrl.events | filter: search " ng-click="MC.markEventOnMap(event); eventCtrl.setActiveEvent(event)">
+    <div class="eventbox" ng-repeat="event in eventCtrl.events | filter: search " ng-click="MC.markEventOnMap(event); eventCtrl.setActiveEvent(event);">
 
         <h3>{{event.name}}</h3>
         <h4>{{event.position.name}}</h4>
+        <input type="button" value="Redigera" ng-show="eventCtrl.currentUserOwnsEvent(event)" ng-click="eventCtrl.setEditMode(true, event)">
 
     </div>
-    <div ng-hide="eventCtrl.activeEvent.name === undefined">
+    <div ng-show="eventCtrl.activeEvent.name !== undefined && editMode == true">
+        <h2>Redigera Event</h2>
+        <h3>Namn: <input ng-model="eventName" type="text" value="{{eventCtrl.activeEvent.name}}"></h3>
+        <h3>Plats: <input ng-model="positionName" type="text" value="{{eventCtrl.activeEvent.position.name}}"></h3>
+        <h3>Datum: <input ng-model="date" type="date" value=""></h3>
+        <div>Beskrivning:  <textarea ng-model="desc"></textarea></div>
+        <div class="tagg">Taggar:
+                <textarea ng-model="tags" ></textarea>
+                <!--<a ng-repeat="tagg in eventCtrl.activeEvent.tag_on_events" ng-click="eventCtrl.setSearch(tagg.tag)">
+
+                    {{tagg.tag.name}}
+                </a>-->
+        </div>
+        <input type="button" value="Spara" ng-click="eventCtrl.saveEdit()">
+        <input type="button" value="Avbryt redigering" ng-click="eventCtrl.setEditMode(false)">
+    </div>
+
+    <div ng-show="eventCtrl.activeEvent.name !== undefined && editMode == false">
         <h2>Event detaljer</h2>
         <h3>Namn: {{eventCtrl.activeEvent.name}}</h3>
+        <h3>Plats: {{eventCtrl.activeEvent.position.name}}</h3>
         <h3>Datum: {{eventCtrl.activeEvent.eventDate | date}}</h3>
         <div><p>Beskrivning: {{eventCtrl.activeEvent.desc}}</p></div>
-        <div>Taggar:
+        <div class="tagg">Taggar:
             <a ng-repeat="tagg in eventCtrl.activeEvent.tag_on_events" ng-click="eventCtrl.setSearch(tagg.tag)">
                 #{{tagg.tag.name}},
             </a>
