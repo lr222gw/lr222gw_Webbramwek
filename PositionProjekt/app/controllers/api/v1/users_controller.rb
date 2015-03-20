@@ -22,7 +22,7 @@ module Api
           if !@user
 
             if request.headers["email"] == nil
-   
+
               render :json => {:error => "User must provide Email"}, status: :bad_request and return
             end
 

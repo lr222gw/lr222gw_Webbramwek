@@ -27,6 +27,8 @@ Rails.application.routes.draw do
       resources :events #:api/v1/events
       resources :users
 
+
+      put 'uppdateExtra' => 'events#updateWithExtra', as: :updateWithExtra
       post 'login' => "users#login", as: :api_Login
 
       resources :tags

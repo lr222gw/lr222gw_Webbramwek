@@ -2,3 +2,5 @@
 -lägger till funktionalitet för inloggning genom apiet...
 
 -fixed broken response
+
+-fixar en lättare update funktion att jobba med på apiet

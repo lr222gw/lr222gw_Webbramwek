@@ -76,6 +76,87 @@ module Api
 
       end
 
+      def updateWithExtra
+        json_params = ActionController::Parameters.new( JSON.parse(request.body.read) )
+
+
+        puts json_params["event"]
+        if(Event.where(:user_id => getUserFromAuthorizationToken, :id => json_params["event"]["id"]).exists?)
+          @event = Event.find(json_params["event"]["id"])
+          puts "OVER HERE!"
+          puts json_params["event"]
+          puts @event.to_json
+          puts "I AM A LIVE"
+
+          @event.name = json_params["event"]["name"]
+          #puts json_params["event"]["name"]
+          puts @event.position
+          pos = Position.find(@event.position.id)
+          pos.name = json_params["event"]["position"]["name"]
+          pos.save
+
+
+          puts json_params["event"]["position"]["name"]
+          puts @event.position
+          @event.desc = json_params["event"]["desc"]
+          #puts json_params["event"]["desc"]
+          @event.eventDate = json_params["event"]["eventDate"]
+          #puts json_params["event"]["eventDate"]
+
+          @event.save
+
+          arrWithTags = []
+          tagArr = json_params["event"]["tags"].split(", ");
+          puts tagArr
+
+
+
+          #@event.tag_on_events = []
+          #TagOnEvent.where("event_id" => @event.id).delete
+          TagOnEvent.where("event_id" => @event.id).delete_all
+
+          tagArr.each do |tagg|
+
+            if(Tag.where("name" => tagg).exists?)
+              puts "hell SON"
+              #puts TagOnEvent.where("name" === tagg, "event_id" === @event.id)[0]
+              #@event.tag_on_events <<
+              puts tagg
+              existingTag = Tag.where("name" => tagg)[0]
+              puts existingTag.name
+              puts @event
+              puts @event.id
+              toe = TagOnEvent.create("tag" => existingTag, "tag_id" => existingTag.id, "event" => @event, "event_id" => @event.id)#TagOnEvent.where("name" === tagg, "event_id" === @event.id)[0]
+              toe.save
+              puts toe.errors.messages
+              #@event.tag_on_events << toe
+
+              #toe = TagOnEvent.create("tag" => Tag.first, "tag_id" => Tag.first.id, "event" => Event.first, "event_id" => Event.first.id)
+
+              #toe = TagOnEvent.create("tag" => tag, "tag_id" => tag.id, "event" => @event, "event_id" => @event.id)
+              #toe.save
+
+              puts "eat Soap"
+              #tagOnEvent =
+              #@event.tag_on_events << TagOnEvent.create("tag" => Tag.where("name" === "krona")[0], "tag_id" => Tag.where("name" === "krona")[0].id, "event" => Event.first, "event_id" => Event.first.id)
+            else
+              tag = Tag.create("name" => tagg)
+              tag.save
+              toe = TagOnEvent.create("tag" => tag, "tag_id" => tag.id, "event" => @event, "event_id" => @event.id)
+              @event.tag_on_events << toe
+            end
+
+          end
+
+          @event.save
+
+          #respond_with :api, :v1, @event
+          render json: {success: "Updated event!", event: @event}, status: :ok and return
+        end
+
+        render json: {error: "You dont have access to this event!"}, status: :forbidden and return
+      end
+
       def update
 
         if(Event.where(:user_id => getUserFromAuthorizationToken, :id => params[:id]).exists?)

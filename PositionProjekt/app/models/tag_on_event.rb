@@ -14,5 +14,4 @@ class TagOnEvent < ActiveRecord::Base
   validates_presence_of :event, :event_id
   validates_associated :event
 
-
 end

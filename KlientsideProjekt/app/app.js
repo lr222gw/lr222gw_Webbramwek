@@ -73,6 +73,7 @@ app.controller('LoginController', function($http, $scope, $rootScope, flash, API
             localStorage["loggedIn"] = true;
             localStorage["userId"] = jwtHelper.decodeToken(data.jwt).user_id;
             localStorage["jwtToken"] = data.jwt;
+
         });
         promise.error(function(data, status, headers, config){
             $rootScope.token = "illegal token"; //ogiltig nyckel...
@@ -98,12 +99,12 @@ app.directive("allEventsbox", function(){
             var tags = [];
             this.prevEvent = null;
 
+
             var promise = $http.get(API.baseUrl + "events?" + API.apikey);
 
             promise.success(function(data){
 
-
-                    flash.success = "Lyckad uppkoppling mot API!";
+                flash.success = "Lyckad uppkoppling mot API!";
 
                 EventCtrl.events = data.entries;
 
@@ -141,7 +142,54 @@ app.directive("allEventsbox", function(){
 
             }
             this.saveEdit = function(){
-                console.log(vm.eventName)
+                var eventToEdit = myGlobals.eventToEdit;
+                eventToEdit.name = $scope.eventName;
+                eventToEdit.eventDate = $scope.date;
+                eventToEdit.desc = $scope.desc;
+                eventToEdit.position.name = $scope.positionName;
+                eventToEdit.name = $scope.eventName;
+                eventToEdit.tags = $scope.tags;
+                var data = {
+                    event: eventToEdit
+                }
+
+                myGlobals.eventToEdit = undefined;
+
+                var config = {
+                    headers : {
+                        "X-APIkey" : API.apikey,
+                        "Accept" : "application/json", //responsedatan vi vill ha...
+                        'Authorization' : localStorage["jwtToken"]
+                    }
+                }
+
+                var promise = $http.put(API.baseUrl+"uppdateExtra?"+API.apikey, data, config)
+
+                promise.success(function(){
+                    flash.success ="Ändringarna sparades"
+
+
+
+                    var promise = $http.get(API.baseUrl + "events?" + API.apikey);
+
+                    promise.success(function(data){
+
+                        flash.success = "Lyckad uppkoppling mot API!";
+
+                        EventCtrl.events = data.entries;
+                        $scope.editMode = false
+                    });
+
+                    promise.error(function(data){
+                        flash.error = "Kunde inte komma åt API!";
+                        console.log(data);
+                    });
+                })
+
+                promise.error(function(){
+                    flash.error ="Något blev fel"
+                })
+
             }
 
             this.getTags = function(event){
@@ -179,6 +227,8 @@ app.directive("allEventsbox", function(){
             }
 
             this.currentUserOwnsEvent = function(event){
+                /*console.log("events Users ID = "+ event.user_id.toString())
+                console.log("user Id = "+ localStorage['userId'])*/
                 return event.user_id.toString() === localStorage['userId'];
             }
 
