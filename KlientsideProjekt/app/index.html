@@ -15,7 +15,15 @@
         <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body>
+    <!-- Subscribe to success flash messages. -->
+    <div flash-alert="success" active-class="in" class="alert fade">
+        <span class="alert-message">{{flash.message}}</span>
+    </div>
 
+    <!-- Subscribe to error flash messages. -->
+    <div flash-alert="error" active-class="in" class="alert fade">
+        <span class="alert-message">{{flash.message}}</span>
+    </div>
 
 
 
@@ -30,6 +38,7 @@
         <script src="bower_components/angular-route/angular-route.js"></script>
         <script src="shared/map/googlemap.js"></script>
         <script src="shared/map/ng-map.min.js"></script>
+        <script src="shared/angular-flash/angular-flash.min.js"></script>
         <script src="app.js"></script>
         <script src="components/version/version.js"></script>
         <script src="components/version/version-directive.js"></script>

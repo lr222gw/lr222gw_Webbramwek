@@ -1,7 +1,7 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-var app = angular.module('myApp', ['ngMap', 'ngRoute']);
+var app = angular.module('myApp', ['ngMap', 'ngRoute', 'angular-flash.service', 'angular-flash.flash-alert-directive']);
 
 app.controller('MapController', function($scope){
     var vm = this;
@@ -52,32 +52,41 @@ app.directive("allEventsbox", function(){
     return {
         restrict: "E",
         templateUrl : "shared/event/allEventboxTemplate.html",
-        controller : ["$http", "API", "$scope",function($http, API, $scope){
-            var events = {};
+        controller : ["$http", "API", "$scope" , "flash", function($http, API, $scope, flash){
+            var events = [];
             var activeEvent = {};
             var EventCtrl = this;
-            var tags = []
+            var tags = [];
 
             var promise = $http.get("http://127.0.0.1:3000/api/v1/events?" + API.apikey);
 
             promise.success(function(data){
+
+
+                    flash.success = "Lyckad uppkoppling mot API!";
+
                 EventCtrl.events = data.entries;
                 console.log(EventCtrl.events)
             });
 
             promise.error(function(data){
+                flash.error = "Kunde inte komma åt API!";
                 console.log(data);
             });
 
             var promise2 = $http.get("http://127.0.0.1:3000/api/v1/tags?" + API.apikey);
 
             promise2.success(function(data){
+
+                    flash.success = "Lyckad uppkoppling mot API!";
+         
                 EventCtrl.tags = data.entries;
                 console.log(EventCtrl.tags)
             });
 
             promise2.error(function(data){
                 console.log(data);
+                flash.error = "Kunde inte komma åt API!";
             });
 
             this.setActiveEvent = function(event){
@@ -132,6 +141,19 @@ app.directive("allEventsbox", function(){
 app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/view1'});
 }]);
+
+app.config(function(flashProvider){
+    // Support bootstrap 3.0 "alert-danger" class with error flash types
+    flashProvider.errorClassnames.push('alert-danger');
+
+    /**
+     * Also have...
+     *
+     * flashProvider.warnClassnames
+     * flashProvider.infoClassnames
+     * flashProvider.successClassnames
+     */
+});
 
 app.constant("API", { //Inte bra att ha nyckeln på klienten egentligen
     'apikey' : "apikey=c2hpdHR5c2hpdHRlc3RAdGVzdC5zZSQyYSQxMCRtUWNObW03Z05WWkc3MFBZaXpaN0Mu"
