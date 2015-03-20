@@ -16,29 +16,39 @@
     </head>
     <body>
     <!-- Subscribe to success flash messages. -->
-    <div flash-alert="success" active-class="in" class="alert fade">
-        <span class="alert-message">{{flash.message}}</span>
-    </div>
+        <div flash-alert="success" active-class="in" class="alert fade">
+            <span class="alert-message">{{flash.message}}</span>
+        </div>
 
-    <!-- Subscribe to error flash messages. -->
-    <div flash-alert="error" active-class="in" class="alert fade">
-        <span class="alert-message">{{flash.message}}</span>
-    </div>
-
+        <!-- Subscribe to error flash messages. -->
+        <div flash-alert="error" active-class="in" class="alert fade">
+            <span class="alert-message">{{flash.message}}</span>
+        </div>
 
 
         <div data-ng-controller="MapController as MC">
             <map center="current-location" zoom="8" class="map"></map>
 
-        <all-eventsbox></all-eventsbox>
-
+            <all-eventsbox></all-eventsbox>
         </div>
+
+        <div class="loginbox" ng-controller="LoginController as loginCtrl">
+            <form name="loginform" ng-submit="loginCtrl.login()">
+                <label>Email: </label>
+                <input type="email" ng-model="email">
+                <label>Lösenord: </label>
+                <input type="password" ng-model="password">
+                <input type="submit" value="Logga in">
+            </form>
+        </div>
+
 
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/angular-route/angular-route.js"></script>
         <script src="shared/map/googlemap.js"></script>
         <script src="shared/map/ng-map.min.js"></script>
         <script src="shared/angular-flash/angular-flash.min.js"></script>
+        <script type="text/javascript" src="shared/angular-jwt/angular-jwt.js"></script>
         <script src="app.js"></script>
         <script src="components/version/version.js"></script>
         <script src="components/version/version-directive.js"></script>

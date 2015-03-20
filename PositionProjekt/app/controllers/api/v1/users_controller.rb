@@ -9,6 +9,31 @@ module Api
       before_filter :authenticateJWT,:only => [:destroy, :update]
       respond_to :json
 
+      def login
+
+        @user = User.find_by_email(request.headers["email"])
+        if @user && @user.authenticate(request.headers["password"])
+          jwt = create_token(@user.id);
+          render :json => {:success => "User was able to login", :jwt => jwt, status: :ok} and return
+        else
+
+          if !@user
+
+            if request.headers["email"] == nil
+              render :json => {:error => "User must provive Email", status: :bad_request} and return
+            end
+
+            render :json => {:error => "User with Email #{request.headers["email"]} was not found", status: :bad_request} and return
+          else
+            if !@user.authenticate(request.headers["password"])
+
+              render :json => {:error => "The password was incorrect", status: :bad_request} and return
+
+            end
+          end
+        end
+      end
+
       def index
         users = User.all.paginate(page: params[:page], per_page: 15)
 

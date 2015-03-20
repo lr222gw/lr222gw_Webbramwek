@@ -1,7 +1,7 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-var app = angular.module('myApp', ['ngMap', 'ngRoute', 'angular-flash.service', 'angular-flash.flash-alert-directive']);
+var app = angular.module('myApp', ['ngMap', 'ngRoute', 'angular-flash.service', 'angular-flash.flash-alert-directive', 'angular-jwt']);
 
 app.controller('MapController', function($scope){
     var vm = this;
@@ -30,23 +30,40 @@ app.controller('MapController', function($scope){
 
 });
 
-/*app.controller("EventController", ["$http", "API",function($http, API){
+app.controller('LoginController', function($http, $scope, $rootScope, flash, API){
+    var vm = this;
+    $rootScope.isLoggedIn = false;
 
-    var events = {};
-    var EventCtrl = this;
+    vm.login =function(){
+        console.log($scope.email + $scope.password)
+        var data = {'email' : $scope.email, 'password' : $scope.password};
+            //Datan vi skickar med är anpassad efter vad vårt api kräver, i detta fall inloggningsuppgifter
 
-    var promise = $http.get("http://127.0.0.1:3000/api/v1/events?" + API.apikey);
+        var url = API.baseUrl + "tags?" + API.apikey;
+            //URLn som vi ska till på vårt api för att få tillbaka en inloggnings token (JWT)
 
-    promise.success(function(data){
-        EventCtrl.events = data.entries;
-        console.log(EventCtrl.events)
-    });
+        var config = {
+            headers : {
+                "X-APIkey" : API.apikey,
+                "Accept" : "application/json" //responsedatan vi vill ha...
+            }
+        }
 
-    promise.error(function(data){
-        console.log(data);
-    });
+        var promise = $http.post(url, data, config); //skickar med datan vi strukturerat..
 
-}]);*/
+        promise.success(function(data, status, headers, config){
+
+            //Funktionen som anropas om promise gick bra!
+            $rootScope.token = data.auth_token;//gör nyckeln tillgänglig i programmet
+            $rootScope.isLoggedIn = true; //isLoggedIn = true pga lyckad inlogg
+            flash.success = "Inloggning lyckades";
+        });
+        promise.error(function(data, status, headers, config){
+            $rootScope.token = "illegal token"; //ogiltig nyckel...
+            $rootScope.isLoggedIn = false; //false pga misslyckad inlogg
+        });
+    }
+});
 
 app.directive("allEventsbox", function(){
     return {
@@ -58,7 +75,7 @@ app.directive("allEventsbox", function(){
             var EventCtrl = this;
             var tags = [];
 
-            var promise = $http.get("http://127.0.0.1:3000/api/v1/events?" + API.apikey);
+            var promise = $http.get(API.baseUrl + "events?" + API.apikey);
 
             promise.success(function(data){
 
@@ -66,7 +83,7 @@ app.directive("allEventsbox", function(){
                     flash.success = "Lyckad uppkoppling mot API!";
 
                 EventCtrl.events = data.entries;
-                console.log(EventCtrl.events)
+
             });
 
             promise.error(function(data){
@@ -74,14 +91,14 @@ app.directive("allEventsbox", function(){
                 console.log(data);
             });
 
-            var promise2 = $http.get("http://127.0.0.1:3000/api/v1/tags?" + API.apikey);
+            var promise2 = $http.get( API.baseUrl + "tags?" + API.apikey);
 
             promise2.success(function(data){
 
                     flash.success = "Lyckad uppkoppling mot API!";
-         
+
                 EventCtrl.tags = data.entries;
-                console.log(EventCtrl.tags)
+
             });
 
             promise2.error(function(data){
@@ -156,7 +173,8 @@ app.config(function(flashProvider){
 });
 
 app.constant("API", { //Inte bra att ha nyckeln på klienten egentligen
-    'apikey' : "apikey=c2hpdHR5c2hpdHRlc3RAdGVzdC5zZSQyYSQxMCRtUWNObW03Z05WWkc3MFBZaXpaN0Mu"
+    'apikey' : "apikey=c2hpdHR5c2hpdHRlc3RAdGVzdC5zZSQyYSQxMCRtUWNObW03Z05WWkc3MFBZaXpaN0Mu",
+    'baseUrl' : "http://127.0.0.1:3000/api/v1/"
 });
 
 var myGlobals = {

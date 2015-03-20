@@ -26,6 +26,9 @@ Rails.application.routes.draw do
 
       resources :events #:api/v1/events
       resources :users
+
+      post 'login' => "users#login", as: :api_Login
+
       resources :tags
       resources :positions
 
