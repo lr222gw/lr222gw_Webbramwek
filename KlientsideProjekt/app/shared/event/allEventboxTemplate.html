@@ -47,6 +47,6 @@
                 #{{tagg.tag.name}},
             </a>
         </div>
-        <input type="button" value="Redigera" ng-show="eventCtrl.currentUserOwnsEvent(event)" ng-click="eventCtrl.setEditMode(true, event)">
+        <input type="button" value="Redigera" ng-show="eventCtrl.currentUserOwnsEvent(eventCtrl.activeEvent)" ng-click="eventCtrl.setEditMode(true, eventCtrl.activeEvent)">
     </div>
 </div>

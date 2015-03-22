@@ -87,298 +87,333 @@ app.controller('LoginController', function($http, $scope, $rootScope, flash, API
     }
 });
 
+app.controller('EventController',
+    ["$http", "API", "$scope" , "flash", "$filter", "$rootScope", '$routeParams', '$location',
+    function($http, API, $scope, flash, $filter, $rootScope, $routeParams, $location){
+
+    var events = [];
+    var activeEvent = {};
+    var EventCtrl = this;
+    var tags = [];
+    this.prevEvent = null;
+
+    var promise = $http.get(API.baseUrl + "events?" + API.apikey);
+
+    promise.success(function(data){
+
+        flash.success = "Lyckad uppkoppling mot API!";
+
+        EventCtrl.events = data.entries;
+        EventCtrl.checkParams();
+    });
+
+    promise.error(function(data){
+        flash.error = "Kunde inte komma åt API!";
+        console.log(data);
+    });
+
+    var promise2 = $http.get( API.baseUrl + "tags?" + API.apikey);
+
+    promise2.success(function(data){
+
+        flash.success = "Lyckad uppkoppling mot API!";
+
+        EventCtrl.tags = data.entries;
+
+    });
+
+    promise2.error(function(data){
+        console.log(data);
+        flash.error = "Kunde inte komma åt API!";
+    });
+
+    this.checkParams = function(){
+        if($routeParams.id !== undefined){
+            console.log($routeParams.id)
+            console.log($routeParams)
+
+            for(var i = 0; i < EventCtrl.events.length; i++){
+
+                /*console.log(EventCtrl.events[i].id)
+                console.log($routeParams.id)*/
+                if(EventCtrl.events[i].id.toString() === $routeParams.id.toString()){
+                    EventCtrl.activeEvent = EventCtrl.events[i];
+                }
+            }
+
+        }
+    }
+
+    this.setActiveEvent = function(event){
+        if(myGlobals.eventToEdit !== undefined){
+            if( myGlobals.eventToEdit.id !== event.id){
+                $scope.editMode = false;
+            }
+        }else{$scope.editMode = false;}
+
+        EventCtrl.activeEvent = event;
+        $rootScope.activeEvent = event
+        $location.url('/event/' + event.id)
+
+    }
+    this.deleteEvent = function(){
+        if(confirm("Är du helt säker på att du vill radera skiten?")){
+            var eventToEdit = myGlobals.eventToEdit;
+            var data = {
+                event: eventToEdit
+            }
+
+            myGlobals.eventToEdit = undefined;
+
+            var config = {
+                headers : {
+                    "X-APIkey" : API.apikey,
+                    "Accept" : "application/json", //responsedatan vi vill ha...
+                    'Authorization' : localStorage["jwtToken"]
+                }
+            }
+
+            var promise = $http.delete(API.baseUrl+"events/"+eventToEdit.id+"?"+API.apikey, config)
+
+            promise.success(function(){
+
+                EventCtrl.updateLists()
+            });
+            promise.error(function(){
+
+            });
+        }
+    }
+    this.updateLists = function(){
+
+        var promise = $http.get(API.baseUrl + "events?" + API.apikey);
+
+        promise.success(function(data){
+            EventCtrl.events = [];
+            //flash.success = "Lyckad uppkoppling mot API!";
+
+            EventCtrl.events = data.entries;
+            $scope.editMode = false
+        });
+
+        promise.error(function(data){
+            flash.error = "Kunde inte komma åt API!";
+            console.log(data);
+        });
+    }
+    this.saveEvent = function(){
+
+        console.log($scope.eventName)
+        var event = {};
+        if($scope.eventName !== undefined && $scope.eventName !== ""){
+            event.name =$scope.eventName;
+        }else{
+
+            flash.error = "Du måste ange ett namn till eventet"
+
+            return}
+
+        console.log($scope.positionName)
+        if($scope.positionName !== undefined && $scope.positionName !== ""){
+            event.position = {}
+            event.position.name =$scope.positionName;
+
+        }else{
+            flash.error = "Du måste ange ett namn till platsen"
+            return}
+
+        console.log($scope.date)
+        if($scope.date !== undefined && $scope.date !== ""){
+
+            event.eventDate =$scope.date;
+
+        }else{
+            flash.error = "Du måste ange ett datum för fasiken"
+            return}
+
+        console.log($scope.desc)
+        if($scope.desc !== undefined && $scope.desc !== ""){
+            event.desc =$scope.desc;
+        }else{
+            flash.error = "Ange en beskrivning. Hur ska folk annars fatta?"
+            return}
+        event.tags =$scope.tags;
+        flash.error = "";
+
+        console.log($scope.tagg)
+
+        var data = {
+            event: event
+        }
+
+        myGlobals.eventToEdit = undefined;
+
+        var config = {
+            headers : {
+                "X-APIkey" : API.apikey,
+                "Accept" : "application/json", //responsedatan vi vill ha...
+                'Authorization' : localStorage["jwtToken"]
+            }
+        }
+
+        var promise = $http.post(API.baseUrl+"createExtra?"+API.apikey, data, config);
+
+        promise.success(function(){
+            flash.success ="Eventet sparades"
+            EventCtrl.updateLists()
+        })
+
+        promise.error(function(){
+            flash.error ="Eventet sparades inte som det skulle, logga ut sen logga in och gör om..."
+        })
+
+
+    }
+    this.saveEdit = function(){
+        var eventToEdit = myGlobals.eventToEdit;
+        eventToEdit.name = $scope.eventName;
+        eventToEdit.eventDate = $scope.date;
+        eventToEdit.desc = $scope.desc;
+        eventToEdit.position.name = $scope.positionName;
+        //eventToEdit.name = $scope.eventName;
+        eventToEdit.tags = $scope.tags;
+        var data = {
+            event: eventToEdit
+        }
+
+        myGlobals.eventToEdit = undefined;
+
+        var config = {
+            headers : {
+                "X-APIkey" : API.apikey,
+                "Accept" : "application/json", //responsedatan vi vill ha...
+                'Authorization' : localStorage["jwtToken"]
+            }
+        }
+
+        var promise = $http.put(API.baseUrl+"uppdateExtra?"+API.apikey, data, config)
+
+        promise.success(function(){
+            flash.success ="Ändringarna sparades"
+            EventCtrl.updateLists()
+
+        })
+
+        promise.error(function(){
+            flash.error ="Något blev fel"
+        })
+
+    }
+
+    this.getTags = function(event){
+        var tagsArr= [];
+        for(var i = 0; i < event.tag_on_events.length; i++){
+            tagsArr.push(event.tag_on_events[i].tag.name);
+        }
+
+        var arrayString = tagsArr.join(", ");
+        return arrayString;
+
+    }
+
+    this.setSearch = function(tag){
+        if($scope.query !== undefined && $scope.query[0] === "#"){
+            $scope.query += ", #"+ tag.name;
+        }else{
+            $scope.query = "#"+ tag.name;
+        }
+    }
+
+    this.setEditMode = function(mode, event){
+        $scope.editMode = mode;
+        if(event !== undefined){
+            if(event !== null){
+                myGlobals.eventToEdit = event;
+
+                $scope.eventName = event.name
+                $scope.tags = this.getTags(event)
+                $scope.desc = event.desc
+                $scope.positionName = event.position.name
+                $scope.date = $filter("date")(event.eventDate,  'yyyy-MM-dd')
+            }
+        }
+    }
+
+    this.currentUserOwnsEvent = function(event){
+        /*console.log("events Users ID = "+ event.user_id.toString())
+         console.log("user Id = "+ localStorage['userId'])*/
+        if(event !== undefined){
+            return event.user_id.toString() === localStorage['userId'];
+        }
+
+    }
+
+    $scope.search = function (event){
+
+        var name = event.name.toLowerCase();
+        var posName = event.position.name.toLowerCase();
+        var query =  $scope.query !== undefined ? $scope.query.toLowerCase() : "" ;
+        var eventTags = [];
+
+        for(var i = 0; i < event.tag_on_events.length; i++){
+            eventTags.push("#"+ event.tag_on_events[i].tag.name.toLowerCase())
+        }
+        var arrWithQueryTags = [];
+        var severalQueryTrue = false
+        if($scope.query !== undefined && $scope.query[0] === "#"){ //om det är en tagg vi kollar efter så kan det finnas flera...
+            arrWithQueryTags = $scope.query.split(", ");
+            console.log(arrWithQueryTags)
+
+            for(var i = 0; i < arrWithQueryTags.length; i++){
+                if(eventTags.indexOf(arrWithQueryTags[i].toLowerCase())!= -1){
+                    severalQueryTrue = true;
+                }
+            }
+
+        }
+
+        if (name.search(query)!=-1 || posName.search(query)!=-1 || eventTags.indexOf(query) != -1 || severalQueryTrue) {
+
+            return true;
+        }
+        return false;
+    };
+
+}]);
+
 app.directive("allEventsbox", function(){
     return {
         restrict: "E",
         templateUrl : "shared/event/allEventboxTemplate.html",
-        controller : ["$http", "API", "$scope" , "flash", "$filter", function($http, API, $scope, flash, $filter){
-            var events = [];
-            var activeEvent = {};
-
-            var EventCtrl = this;
-            var tags = [];
-            this.prevEvent = null;
-
-
-            var promise = $http.get(API.baseUrl + "events?" + API.apikey);
-
-            promise.success(function(data){
-
-                flash.success = "Lyckad uppkoppling mot API!";
-
-                EventCtrl.events = data.entries;
-
-            });
-
-            promise.error(function(data){
-                flash.error = "Kunde inte komma åt API!";
-                console.log(data);
-            });
-
-            var promise2 = $http.get( API.baseUrl + "tags?" + API.apikey);
-
-            promise2.success(function(data){
-
-                    flash.success = "Lyckad uppkoppling mot API!";
-
-                EventCtrl.tags = data.entries;
-
-            });
-
-            promise2.error(function(data){
-                console.log(data);
-                flash.error = "Kunde inte komma åt API!";
-            });
-
-            this.setActiveEvent = function(event){
-                if(myGlobals.eventToEdit !== undefined){
-                    if( myGlobals.eventToEdit.id !== event.id){
-                        $scope.editMode = false;
-                    }
-                }else{$scope.editMode = false;}
-
-                EventCtrl.activeEvent = event;
-
-
-            }
-            this.deleteEvent = function(){
-                if(confirm("Är du helt säker på att du vill radera skiten?")){
-                    var eventToEdit = myGlobals.eventToEdit;
-                    var data = {
-                        event: eventToEdit
-                    }
-
-                    myGlobals.eventToEdit = undefined;
-
-                    var config = {
-                        headers : {
-                            "X-APIkey" : API.apikey,
-                            "Accept" : "application/json", //responsedatan vi vill ha...
-                            'Authorization' : localStorage["jwtToken"]
-                        }
-                    }
-
-                    var promise = $http.delete(API.baseUrl+"events/"+eventToEdit.id+"?"+API.apikey, config)
-
-                    promise.success(function(){
-
-                        EventCtrl.updateLists()
-                    });
-                    promise.error(function(){
-
-                    });
-                }
-            }
-            this.updateLists = function(){
-
-                var promise = $http.get(API.baseUrl + "events?" + API.apikey);
-
-                promise.success(function(data){
-                    EventCtrl.events = [];
-                    //flash.success = "Lyckad uppkoppling mot API!";
-
-                    EventCtrl.events = data.entries;
-                    $scope.editMode = false
-                });
-
-                promise.error(function(data){
-                    flash.error = "Kunde inte komma åt API!";
-                    console.log(data);
-                });
-            }
-            this.saveEvent = function(){
-
-                console.log($scope.eventName)
-                var event = {};
-                if($scope.eventName !== undefined && $scope.eventName !== ""){
-                    event.name =$scope.eventName;
-                }else{
-
-                    flash.error = "Du måste ange ett namn till eventet"
-
-                    return}
-
-                console.log($scope.positionName)
-                if($scope.positionName !== undefined && $scope.positionName !== ""){
-                    event.position = {}
-                    event.position.name =$scope.positionName;
-
-                }else{
-                    flash.error = "Du måste ange ett namn till platsen"
-                    return}
-
-                console.log($scope.date)
-                if($scope.date !== undefined && $scope.date !== ""){
-
-                    event.eventDate =$scope.date;
-
-                }else{
-                    flash.error = "Du måste ange ett datum för fasiken"
-                    return}
-
-                console.log($scope.desc)
-                if($scope.desc !== undefined && $scope.desc !== ""){
-                    event.desc =$scope.desc;
-                }else{
-                    flash.error = "Ange en beskrivning. Hur ska folk annars fatta?"
-                    return}
-                event.tags =$scope.tags;
-                flash.error = "";
-
-                console.log($scope.tagg)
-
-                var data = {
-                    event: event
-                }
-
-                myGlobals.eventToEdit = undefined;
-
-                var config = {
-                    headers : {
-                        "X-APIkey" : API.apikey,
-                        "Accept" : "application/json", //responsedatan vi vill ha...
-                        'Authorization' : localStorage["jwtToken"]
-                    }
-                }
-
-                var promise = $http.post(API.baseUrl+"createExtra?"+API.apikey, data, config);
-
-                promise.success(function(){
-                    flash.success ="Eventet sparades"
-                    EventCtrl.updateLists()
-                })
-
-                promise.error(function(){
-                    flash.error ="Eventet sparades inte som det skulle, logga ut sen logga in och gör om..."
-                })
-
-
-            }
-            this.saveEdit = function(){
-                var eventToEdit = myGlobals.eventToEdit;
-                eventToEdit.name = $scope.eventName;
-                eventToEdit.eventDate = $scope.date;
-                eventToEdit.desc = $scope.desc;
-                eventToEdit.position.name = $scope.positionName;
-                //eventToEdit.name = $scope.eventName;
-                eventToEdit.tags = $scope.tags;
-                var data = {
-                    event: eventToEdit
-                }
-
-                myGlobals.eventToEdit = undefined;
-
-                var config = {
-                    headers : {
-                        "X-APIkey" : API.apikey,
-                        "Accept" : "application/json", //responsedatan vi vill ha...
-                        'Authorization' : localStorage["jwtToken"]
-                    }
-                }
-
-                var promise = $http.put(API.baseUrl+"uppdateExtra?"+API.apikey, data, config)
-
-                promise.success(function(){
-                    flash.success ="Ändringarna sparades"
-                    EventCtrl.updateLists()
-
-                })
-
-                promise.error(function(){
-                    flash.error ="Något blev fel"
-                })
-
-            }
-
-            this.getTags = function(event){
-                var tagsArr= [];
-                for(var i = 0; i < event.tag_on_events.length; i++){
-                    tagsArr.push(event.tag_on_events[i].tag.name);
-                }
-
-                var arrayString = tagsArr.join(", ");
-                return arrayString;
-
-            }
-
-            this.setSearch = function(tag){
-                if($scope.query !== undefined && $scope.query[0] === "#"){
-                    $scope.query += ", #"+ tag.name;
-                }else{
-                    $scope.query = "#"+ tag.name;
-                }
-            }
-
-            this.setEditMode = function(mode, event){
-                $scope.editMode = mode;
-                if(event !== undefined){
-                    if(event !== null){
-                        myGlobals.eventToEdit = event;
-
-                        $scope.eventName = event.name
-                        $scope.tags = this.getTags(event)
-                        $scope.desc = event.desc
-                        $scope.positionName = event.position.name
-                        $scope.date = $filter("date")(event.eventDate,  'yyyy-MM-dd')
-                    }
-                }
-            }
-
-            this.currentUserOwnsEvent = function(event){
-                /*console.log("events Users ID = "+ event.user_id.toString())
-                console.log("user Id = "+ localStorage['userId'])*/
-                return event.user_id.toString() === localStorage['userId'];
-            }
-
-            $scope.search = function (event){
-
-                var name = event.name.toLowerCase();
-                var posName = event.position.name.toLowerCase();
-                var query =  $scope.query !== undefined ? $scope.query.toLowerCase() : "" ;
-                var eventTags = [];
-
-                for(var i = 0; i < event.tag_on_events.length; i++){
-                    eventTags.push("#"+ event.tag_on_events[i].tag.name.toLowerCase())
-                }
-                var arrWithQueryTags = [];
-                var severalQueryTrue = false
-                if($scope.query !== undefined && $scope.query[0] === "#"){ //om det är en tagg vi kollar efter så kan det finnas flera...
-                    arrWithQueryTags = $scope.query.split(", ");
-                    console.log(arrWithQueryTags)
-
-                    for(var i = 0; i < arrWithQueryTags.length; i++){
-                        if(eventTags.indexOf(arrWithQueryTags[i].toLowerCase())!= -1){
-                            severalQueryTrue = true;
-                        }
-                    }
-
-                }
-
-                if (name.search(query)!=-1 || posName.search(query)!=-1 || eventTags.indexOf(query) != -1 || severalQueryTrue) {
-
-                    return true;
-                }
-                return false;
-            };
-
-        }],
+        controller : 'EventController',
         controllerAs: "eventCtrl"
     }
 });
 
+app.controller('EventUrlController', ['$routeParams', '$rootScope',function($routeParams, $rootScope){
+    alert()
+    var id = $routeParams.id;
+    console.log("yolo" )
+    //$rootScope.activeEvent
+}]);
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
-    var easyPHPFix = '/klientapp2'; // Se till att du kommer in på appen via URLn http://127.0.0.1/klientapp2/
-                                    //Om du kommer in på appen genom http://127.0.0.1/ så kan di ändra easyPHPFix till bara ""...
-    $routeProvider.when(easyPHPFix+'/',{
+    var UrlFix = "";//"/app";//'/klientapp2'; // Se till att du kommer in på appen via URLn http://127.0.0.1/klientapp2/
+                                    //Om du kommer in på appen genom http://127.0.0.1/ så kan di ändra UrlFix till bara ""...
+    $routeProvider.when(UrlFix+'/',{
         template: "<div><strong><h1>Vad-Du-Än-Vill Kartan</h1></strong></div>"
-    }).when(easyPHPFix+'/a',{
-        template: "<div>SHIT</div>"
+    }).when(UrlFix+'/cool',{
+        template: "<div>This is my cool crib</div>"
+    }).when(UrlFix+'/lame',{
+        template: "<div>this is my lame crib :(</div>"
+    }).when('/event/:id',{
+        controller: 'EventController'
     }).otherwise({
-        template: '<div><strong>Det finns ingenting här, gå tillbaka... :)</strong></div>'
+        redirectTo: '/' //<div><strong>Det finns ingenting här, gå tillbaka... :)</strong></div>
     });
 
-    $locationProvider.html5Mode(true);
+    //html5Mode(true) <- krånglade...
+    //$locationProvider.html5Mode(true);
 }]);
 
 app.config(function(flashProvider){
