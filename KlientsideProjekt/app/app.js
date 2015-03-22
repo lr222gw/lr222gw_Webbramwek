@@ -368,8 +368,18 @@ app.directive("allEventsbox", function(){
 });
 
 
-app.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.otherwise({redirectTo: '/view1'});
+app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+    var easyPHPFix = '/klientapp2'; // Se till att du kommer in på appen via URLn http://127.0.0.1/klientapp2/
+                                    //Om du kommer in på appen genom http://127.0.0.1/ så kan di ändra easyPHPFix till bara ""...
+    $routeProvider.when(easyPHPFix+'/',{
+        template: "<div><strong><h1>Vad-Du-Än-Vill Kartan</h1></strong></div>"
+    }).when(easyPHPFix+'/a',{
+        template: "<div>SHIT</div>"
+    }).otherwise({
+        template: '<div><strong>Det finns ingenting här, gå tillbaka... :)</strong></div>'
+    });
+
+    $locationProvider.html5Mode(true);
 }]);
 
 app.config(function(flashProvider){
