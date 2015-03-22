@@ -154,8 +154,7 @@ app.directive("allEventsbox", function(){
                         headers : {
                             "X-APIkey" : API.apikey,
                             "Accept" : "application/json", //responsedatan vi vill ha...
-                            'Authorization' : localStorage["jwtToken"],
-                            'bajs' : "japp de e skit"
+                            'Authorization' : localStorage["jwtToken"]
                         }
                     }
 
@@ -250,7 +249,7 @@ app.directive("allEventsbox", function(){
                 })
 
                 promise.error(function(){
-                    flash.error ="Eventet sparades inte som det skulle"
+                    flash.error ="Eventet sparades inte som det skulle, logga ut sen logga in och gör om..."
                 })
 
 

@@ -55,7 +55,7 @@
       <file leaf-file-name="events_controller.rb" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/controllers/api/v1/events_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7062635" vertical-offset="1424" max-vertical-offset="4675">
+            <state vertical-scroll-proportion="-0.5053996" vertical-offset="1985" max-vertical-offset="4675">
               <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
               <folding />
             </state>
@@ -835,7 +835,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/api/v1/events_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7062635" vertical-offset="1424" max-vertical-offset="4675">
+        <state vertical-scroll-proportion="-0.5053996" vertical-offset="1985" max-vertical-offset="4675">
           <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
           <folding />
         </state>
