@@ -18,35 +18,40 @@
     <div ng-view> </div>
 
     <!-- Subscribe to success flash messages. -->
-        <div flash-alert="success" active-class="in" class="alert fade">
+        <div flash-alert="success" active-class="in" class="success">
             <span class="alert-message">{{flash.message}}</span>
         </div>
 
         <!-- Subscribe to error flash messages. -->
-        <div flash-alert="error" active-class="in" class="alert fade">
+        <div flash-alert="error" active-class="in" class="error">
             <span class="alert-message">{{flash.message}}</span>
         </div>
+    <div><strong><h1>Vad-Du-Än-Vill Kartan</h1></strong></div>
+
 
 
         <div data-ng-controller="MapController as MC">
             <map center="current-location" zoom="8" class="map"></map>
 
+            <div class="loginbox" ng-controller="LoginController as loginCtrl" >
+                <form name="loginform" ng-submit="loginCtrl.login()" ng-hide="loginCtrl.isOnline()">
+                    <div>
+                        <label>Email: </label>
+                        <input type="email" ng-model="email">
+                    </div>
+                    <div>
+                        <label>Lösenord: </label>
+                        <input type="password" ng-model="password">
+                    </div>
+                    <input type="submit" value="Logga in">
+                </form>
+                <form name="logoutform" ng-submit="loginCtrl.logout()" ng-show="loginCtrl.isOnline()">
+                    <input type="submit" value="Logga ut">
+                </form>
+            </div>
+
             <all-eventsbox></all-eventsbox>
         </div>
-
-        <div class="loginbox" ng-controller="LoginController as loginCtrl" >
-            <form name="loginform" ng-submit="loginCtrl.login()" ng-hide="loginCtrl.isOnline()">
-                <label>Email: </label>
-                <input type="email" ng-model="email">
-                <label>Lösenord: </label>
-                <input type="password" ng-model="password">
-                <input type="submit" value="Logga in">
-            </form>
-            <form name="logoutform" ng-submit="loginCtrl.logout()" ng-show="loginCtrl.isOnline()">
-                <input type="submit" value="Logga ut">
-            </form>
-        </div>
-
 
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/angular-route/angular-route.js"></script>

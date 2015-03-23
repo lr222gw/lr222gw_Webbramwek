@@ -12,6 +12,8 @@ class Position < ActiveRecord::Base
 
   geocoded_by :name
 
+  
+
   def fetchGeoLatLng #Kollar om vi behöver hämta ut lng och lat, om de inte redan är satta.
 
     if(self.longitude.nil? || self.latitude.nil?)

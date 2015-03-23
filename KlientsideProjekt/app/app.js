@@ -3,7 +3,7 @@
 // Declare app level module which depends on views, and components
 var app = angular.module('myApp', ['ngMap', 'ngRoute', 'angular-flash.service', 'angular-flash.flash-alert-directive', 'angular-jwt']);
 
-app.controller('MapController', function($scope){
+app.controller('MapController', function($scope, flash){
     var vm = this;
 
     var map;
@@ -22,8 +22,14 @@ app.controller('MapController', function($scope){
             lng:event.position.longitude
         };
         console.log(latlng)
+        if(event.position.latitude !== null && event.position.longitude !== null){
+            myGlobals.currentMarker = new google.maps.Marker({position: latlng, map: map});
+            flash.success = "Hittade eventet på kartan"
+            flash.error = ""
+        }else{
+            flash.error = "Eventet är sparat med ogiltig position, vänligen ändra positionsnamnet (om det är ditt event)"
+        }
 
-        myGlobals.currentMarker = new google.maps.Marker({position: latlng, map: map});
 
         map.panTo(latlng)
     }
@@ -70,6 +76,7 @@ app.controller('LoginController', function($http, $scope, $rootScope, flash, API
             $rootScope.token = data.jwt;//gör nyckeln tillgänglig i programmet
             $rootScope.isLoggedIn = true; //isLoggedIn = true pga lyckad inlogg
             flash.success = "Inloggning lyckades!";
+            flash.error = "";
             localStorage["loggedIn"] = true;
             localStorage["userId"] = jwtHelper.decodeToken(data.jwt).user_id;
             localStorage["jwtToken"] = data.jwt;
@@ -145,6 +152,7 @@ app.controller('EventController',
     }
 
     this.setActiveEvent = function(event){
+        $scope.createMode = false;
         if(myGlobals.eventToEdit !== undefined){
             if( myGlobals.eventToEdit.id !== event.id){
                 $scope.editMode = false;
@@ -183,6 +191,12 @@ app.controller('EventController',
 
             });
         }
+    }
+
+    this.createEventStatus = function(){
+        $scope.createMode= true;
+        $scope.editMode= false;
+        EventCtrl.activeEvent = undefined;
     }
     this.updateLists = function(){
 
@@ -260,6 +274,7 @@ app.controller('EventController',
 
         promise.success(function(){
             flash.success ="Eventet sparades"
+
             EventCtrl.updateLists()
         })
 
@@ -362,7 +377,7 @@ app.controller('EventController',
         var severalQueryTrue = false
         if($scope.query !== undefined && $scope.query[0] === "#"){ //om det är en tagg vi kollar efter så kan det finnas flera...
             arrWithQueryTags = $scope.query.split(", ");
-            console.log(arrWithQueryTags)
+            console.log(arrWithQueryTags);
 
             for(var i = 0; i < arrWithQueryTags.length; i++){
                 if(eventTags.indexOf(arrWithQueryTags[i].toLowerCase())!= -1){
@@ -401,7 +416,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     var UrlFix = "";//"/app";//'/klientapp2'; // Se till att du kommer in på appen via URLn http://127.0.0.1/klientapp2/
                                     //Om du kommer in på appen genom http://127.0.0.1/ så kan di ändra UrlFix till bara ""...
     $routeProvider.when(UrlFix+'/',{
-        template: "<div><strong><h1>Vad-Du-Än-Vill Kartan</h1></strong></div>"
+
     }).when(UrlFix+'/cool',{
         template: "<div>This is my cool crib</div>"
     }).when(UrlFix+'/lame',{
