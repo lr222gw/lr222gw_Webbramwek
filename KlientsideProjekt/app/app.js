@@ -3,9 +3,18 @@
 // Declare app level module which depends on views, and components
 var app = angular.module('myApp', ['ngMap', 'ngRoute', 'angular-flash.service', 'angular-flash.flash-alert-directive', 'angular-jwt']);
 
-app.controller('MapController', function($scope, flash){
+app.controller('MapController', function($scope, flash, $location, $route){
     var vm = this;
+/*    $scope.$on('$routeChangeSuccess',function(){ //Denna kod hör egentligen ej hemma här, men den möjliggör att man kan backa/gå fram i appen med webbläsarens knappar
+        console.log('location is now', $location.path())
+        console.log("prevPath is now" + localStorage["prevPath"])
+        if(localStorage["prevPath"] !== $location.path()){
+            localStorage["prevPath"] = $location.path()
+            //$route.reload();
+            //window.location.reload()
+        }
 
+    })*/
     var map;
 
     $scope.$on('mapInitialized', function(evt, evtMap){
@@ -163,6 +172,9 @@ app.controller('EventController',
         $rootScope.activeEvent = event
         $location.url('/event/' + event.id)
 
+    }
+    this.userIsOnline = function(){
+        return localStorage["loggedIn"]
     }
     this.deleteEvent = function(){
         if(confirm("Är du helt säker på att du vill radera skiten?")){
@@ -412,9 +424,10 @@ app.controller('EventUrlController', ['$routeParams', '$rootScope',function($rou
     //$rootScope.activeEvent
 }]);
 
-app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider ) {
     var UrlFix = "";//"/app";//'/klientapp2'; // Se till att du kommer in på appen via URLn http://127.0.0.1/klientapp2/
                                     //Om du kommer in på appen genom http://127.0.0.1/ så kan di ändra UrlFix till bara ""...
+
     $routeProvider.when(UrlFix+'/',{
 
     }).when(UrlFix+'/cool',{
@@ -445,7 +458,7 @@ app.config(function(flashProvider){
 });
 
 app.constant("API", { //Inte bra att ha nyckeln på klienten egentligen
-    'apikey' : "apikey=Q29vbEFwcGlvdGVzdEB0ZXN0LnNlJDJhJDEwJEhaY0ptMFI5NnZVYnZraGJqQS90VmU=",
+    'apikey' : "apikey=U3R1ZmZ0ZXN0QHRlc3Quc2UkMmEkMTAkYVJHL3EvMnZwbVF4OVRZblovYVZoLg==",
     'baseUrl' : "http://127.0.0.1:3000/api/v1/"
 });
 

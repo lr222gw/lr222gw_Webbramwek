@@ -73,7 +73,7 @@ div#eventSearch {
 }
 
 div#eventDetails {
-    width: 100%;
+    width: 95%;
     display: inline-block;
     padding: 10px;
     background-color: rgb(179, 209, 255);
@@ -109,4 +109,35 @@ div#boxOfEventsWrapper {
     width: 100%;
     border-radius: 0px 0px 20px 10px;
 
+}
+
+a.aTagg {
+    background-color: rgb(85, 130, 206);
+    margin: 5px;
+    padding: 5px;
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: inset rgb(171, 196, 240) 0px 1px 16px 1px;
+}
+
+#loggo h1 {
+    font-family: fantasy;
+    display: inline-block;
+    margin: 0 auto;
+    margin-top: 25px;
+}
+div#loggo {
+    margin: 0 auto;
+    display: inherit;
+    text-align: center;
+    background-color: rgb(255, 255, 255);
+}
+
+
+html {
+    font-size: 1em;
+    line-height: 1.4;
+    background-color: rgb(89, 155, 255);
+    box-shadow: inset rgb(255, 255, 255) 1px 1px 249px;
+    border-bottom: 30px rgb(60, 114, 210) solid;
 }

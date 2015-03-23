@@ -1,7 +1,7 @@
 <div ng-init="editMode = false; createMode=false"> <!-- ng-controller="EventController as eventCtrl" -->
     <div id="eventSearch">
         Sök: <input id="theSearchBox" ng-model="query">
-        <input type="button" value="Skapa event" ng-click="eventCtrl.createEventStatus()">
+        <input type="button" value="Skapa event" ng-show="eventCtrl.userIsOnline()" ng-click="eventCtrl.createEventStatus()">
     </div>
     <div>
         <div id="boxOfEventsWrapper">
@@ -18,7 +18,7 @@
         <div id="eventDetailsWrapper">
             <div id="eventDetails">
 
-                <div ng-show="createMode == true && editMode == false">
+                <div ng-show="createMode == true && editMode == false && eventCtrl.userIsOnline()">
                     <h2>Skapa Event</h2>
                     <h3>Namn: <input ng-model="eventName" type="text" value=""></h3>
                     <h3>Plats: <input ng-model="positionName" type="text" value=""></h3>
@@ -52,7 +52,7 @@
                     <h3>Datum: {{eventCtrl.activeEvent.eventDate | date}}</h3>
                     <div><p>Beskrivning: {{eventCtrl.activeEvent.desc}}</p></div>
                     <div class="tagg">Taggar:
-                        <a ng-repeat="tagg in eventCtrl.activeEvent.tag_on_events" ng-click="eventCtrl.setSearch(tagg.tag)">
+                        <a class="aTagg" ng-repeat="tagg in eventCtrl.activeEvent.tag_on_events" ng-click="eventCtrl.setSearch(tagg.tag)">
                             #{{tagg.tag.name}},
                         </a>
                     </div>

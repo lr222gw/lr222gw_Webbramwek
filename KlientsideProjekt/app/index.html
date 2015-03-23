@@ -6,14 +6,13 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>My AngularJS App</title>
+        <title>Vad-Du-Än-Vill kartan</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
         <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
         <link rel="stylesheet" href="app.css">
-        <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
-    </head>
+        <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>    </head>
     <body>
     <div ng-view> </div>
 
@@ -26,10 +25,10 @@
         <div flash-alert="error" active-class="in" class="error">
             <span class="alert-message">{{flash.message}}</span>
         </div>
-    <div><strong><h1>Vad-Du-Än-Vill Kartan</h1></strong></div>
+    <div id="loggo"><strong><h1>Vad-Du-Än-Vill Kartan</h1></strong></div>
 
 
-
+    <div id="likeEverythign">
         <div data-ng-controller="MapController as MC">
             <map center="current-location" zoom="8" class="map"></map>
 
@@ -52,6 +51,7 @@
 
             <all-eventsbox></all-eventsbox>
         </div>
+    </div>
 
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/angular-route/angular-route.js"></script>
