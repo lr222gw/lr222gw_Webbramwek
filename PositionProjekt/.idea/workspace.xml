@@ -52,11 +52,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="events_controller.rb" pinned="false" current-in-tab="false">
+      <file leaf-file-name="events_controller.rb" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/controllers/api/v1/events_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2393" max-vertical-offset="4675">
-              <caret line="135" column="89" selection-start-line="135" selection-start-column="89" selection-end-line="135" selection-end-column="89" />
+            <state vertical-scroll-proportion="0.6695464" vertical-offset="2393" max-vertical-offset="4709">
+              <caret line="159" column="36" selection-start-line="159" selection-start-column="36" selection-end-line="159" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -92,11 +92,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="position.rb" pinned="false" current-in-tab="true">
+      <file leaf-file-name="position.rb" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models/position.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5" vertical-offset="0" max-vertical-offset="646">
-              <caret line="14" column="2" selection-start-line="14" selection-start-column="2" selection-end-line="14" selection-end-column="2" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="748">
+              <caret line="14" column="16" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -142,8 +142,8 @@
         <option value="$PROJECT_DIR$/app/models/tag_on_event.rb" />
         <option value="$PROJECT_DIR$/app/controllers/application_controller.rb" />
         <option value="$PROJECT_DIR$/config/routes.rb" />
-        <option value="$PROJECT_DIR$/app/controllers/api/v1/events_controller.rb" />
         <option value="$PROJECT_DIR$/app/models/position.rb" />
+        <option value="$PROJECT_DIR$/app/controllers/api/v1/events_controller.rb" />
       </list>
     </option>
   </component>
@@ -825,18 +825,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/api/v1/events_controller.rb">
+    <entry file="file://$PROJECT_DIR$/app/models/position.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2393" max-vertical-offset="4675">
-          <caret line="135" column="89" selection-start-line="135" selection-start-column="89" selection-end-line="135" selection-end-column="89" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="748">
+          <caret line="14" column="16" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/position.rb">
+    <entry file="file://$PROJECT_DIR$/app/controllers/api/v1/events_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5" vertical-offset="0" max-vertical-offset="646">
-          <caret line="14" column="2" selection-start-line="14" selection-start-column="2" selection-end-line="14" selection-end-column="2" />
+        <state vertical-scroll-proportion="0.6695464" vertical-offset="2393" max-vertical-offset="4709">
+          <caret line="159" column="36" selection-start-line="159" selection-start-column="36" selection-end-line="159" selection-end-column="36" />
           <folding />
         </state>
       </provider>

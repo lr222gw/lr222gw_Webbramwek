@@ -156,6 +156,8 @@ module Api
           puts @event.position
           pos = Position.find(@event.position.id)
           pos.name = json_params["event"]["position"]["name"]
+          pos.addGeoName()
+          puts "Did fix with geoName"
           pos.save
 
 
