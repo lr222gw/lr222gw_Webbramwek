@@ -1,37 +1,67 @@
+###KÃ¶rinstruktioner fÃ¶r API och Klientapp!
 
-###Körinstruktioner för API och Klientapp!
+#Starta Apiet.Â 
 
-#Starta Apiet. 
-1. Börja med att öppna upp filerna i PositionProjekt mappen i din Ruby miljö.
-2. I Ruby consolen ska du se till att vara inne i PositionProject mappen, Kör Följande kommand:
-rake db:migrate version=0
-rake db:migrate
-rake db:seed
-rails s
-3. navigera till 127.0.0.1:3000, logga in med denna användare:
+1. BÃ¶rja med att Ã¶ppna upp filerna i PositionProjekt mappen i din Ruby miljÃ¶.
+
+2. I Ruby consolen ska du se till att vara inne i PositionProject mappen, KÃ¶r FÃ¶ljande kommand:
+
+- rake db:migrate version=0
+
+- rake db:migrate
+
+- rake db:seed
+
+- rails s
+
+- navigera till 127.0.0.1:3000, logga in med denna anvÃ¤ndare:
+
 email: test@test.se
+
 password : 123
-4. Från sidan, gör en ny app med "Regga app", ge den ett namn och spara
-5. Ta nyckeln från din applikation som du skapat, den ska du använda när du sätter upp klientapplikationen.
-6. Låt den lokala ruby servern vara på i bakgrunden och börja på nästa steg.
+
+- FrÃ¥n sidan, gÃ¶r en ny app med "Regga app", ge den ett namn och spara
+
+- Ta nyckeln frÃ¥n din applikation som du skapat, den ska du anvÃ¤nda nÃ¤r du sÃ¤tter upp klientapplikationen.
+
+- LÃ¥t den lokala ruby servern vara pÃ¥ i bakgrunden och bÃ¶rja pÃ¥ nÃ¤sta steg.
 
 #Starta klientappen
-1. Börja med att öppna upp filerna i klientsideProjekt mappen i din angular miljö. (själv har jag kört WebStorm 9).
-2. Öppna upp konsolen i webstorm (eller vilket IDE du nu kör) och skriv in följande kommandon:
+
+1. BÃ¶rja med att Ã¶ppna upp filerna i klientsideProjekt mappen i din angular miljÃ¶. (sjÃ¤lv har jag kÃ¶rt WebStorm 9).
+
+2. Ã–ppna upp konsolen i webstorm (eller vilket IDE du nu kÃ¶r) och skriv in fÃ¶ljande kommandon:
+
 npm install
-3. Nu ska vi ta din api nyckel som du fick tag på i förra delen (steg 5) och klistra in den i koden. 
-Navigera till KlientsideProjekt>app>app.js 
-I app.js filen så ska du gå längst ner, där hittar du konstanter. 
-Manipulera denna kod:
-app.constant("API", { 
-    'apikey' : "apikey=XXXX",
-    'baseUrl' : "http://127.0.0.1:3000/api/v1/"
-});
-Där det står XXXX ska du klistra in nyckeln som du hämtade. 
-4. Nu är allt förberett och du kan starta angular appen, det gör du med detta kommando:
+
+3. Nu ska vi ta din api nyckel som du fick tag pÃ¥ i fÃ¶rra delen (steg 5) och klistra in den i koden.Â 
+
+Navigera till KlientsideProjekt&gt;app&gt;app.jsÂ 
+
+I app.js filen sÃ¥ ska du gÃ¥ lÃ¤ngst ner, dÃ¤r hittar du konstanter.Â 
+
+Manipulera denna kod: Â  Â  Â  Â  Â  Â  Â 
+
+`app.constant("API", { Â  Â  Â  Â  Â  Â Â 
+
+Â  Â  'apikey' : "apikey=XXXX", Â  Â  Â  Â  Â  Â  Â 
+
+Â  Â  'baseUrl' : "http://127.0.0.1:3000/api/v1/" Â  Â  Â  Â  Â  Â  Â 
+
+});` Â  Â  Â  Â  Â  Â  Â 
+
+DÃ¤r det stÃ¥r XXXX ska du klistra in nyckeln som du hÃ¤mtade.Â 
+
+4. Nu Ã¤r allt fÃ¶rberett och du kan starta angular appen, det gÃ¶r du med detta kommando:
+
 npm start
+
 5. navigera till http://127.0.0.1:8000/app/
-6. Sådär nu är allt klart för att prova appen, den är lite "rough" men det går :) 
-För att logga in använd uppgifterna:
+
+6. SÃ¥dÃ¤r nu Ã¤r allt klart fÃ¶r att prova appen, den Ã¤r lite "rough" men det gÃ¥r :)Â 
+
+FÃ¶r att logga in anvÃ¤nd uppgifterna:
+
 email: test@test.se
-lösen: 123
+
+lÃ¶sen: 123
