@@ -6,6 +6,8 @@
 
 2. I Ruby consolen ska du se till att vara inne i PositionProject mappen, Kör Följande kommand:
 
+- bundle install
+
 - rake db:migrate version=0
 
 - rake db:migrate
