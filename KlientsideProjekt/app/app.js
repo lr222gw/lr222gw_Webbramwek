@@ -7,9 +7,9 @@ app.controller('MapController', function($scope, flash, $location, $route){
     var vm = this;
 /*    $scope.$on('$routeChangeSuccess',function(){ //Denna kod hör egentligen ej hemma här, men den möjliggör att man kan backa/gå fram i appen med webbläsarens knappar
         console.log('location is now', $location.path())
-        console.log("prevPath is now" + localStorage["prevPath"])
-        if(localStorage["prevPath"] !== $location.path()){
-            localStorage["prevPath"] = $location.path()
+        console.log("prevPath is now" + sessionStorage["prevPath"])
+        if(sessionStorage["prevPath"] !== $location.path()){
+            sessionStorage["prevPath"] = $location.path()
             //$route.reload();
             //window.location.reload()
         }
@@ -47,7 +47,7 @@ app.controller('MapController', function($scope, flash, $location, $route){
 
 app.controller('LoginController', function($http, $scope, $rootScope, flash, API, jwtHelper){
     var vm = this;
-    $rootScope.isLoggedIn = localStorage["loggedIn"] !==  false ? localStorage["loggedIn"] : false;
+    $rootScope.isLoggedIn = sessionStorage["loggedIn"] !==  false ? sessionStorage["loggedIn"] : false;
 
     vm.isOnline = function(){
         return $rootScope.isLoggedIn;
@@ -55,9 +55,9 @@ app.controller('LoginController', function($http, $scope, $rootScope, flash, API
     vm.logout =function() {
         $rootScope.isLoggedIn = false;
         $rootScope.token = "illegal token";
-        localStorage["loggedIn"] = false;
-        localStorage["jwtToken"] = "illegal token";
-        localStorage["userId"] = null;
+        sessionStorage["loggedIn"] = false;
+        sessionStorage["jwtToken"] = "illegal token";
+        sessionStorage["userId"] = null;
         flash.success = "Utloggning lyckades!";
     }
 
@@ -86,9 +86,9 @@ app.controller('LoginController', function($http, $scope, $rootScope, flash, API
             $rootScope.isLoggedIn = true; //isLoggedIn = true pga lyckad inlogg
             flash.success = "Inloggning lyckades!";
             flash.error = "";
-            localStorage["loggedIn"] = true;
-            localStorage["userId"] = jwtHelper.decodeToken(data.jwt).user_id;
-            localStorage["jwtToken"] = data.jwt;
+            sessionStorage["loggedIn"] = true;
+            sessionStorage["userId"] = jwtHelper.decodeToken(data.jwt).user_id;
+            sessionStorage["jwtToken"] = data.jwt;
 
         });
         promise.error(function(data, status, headers, config){
@@ -96,9 +96,9 @@ app.controller('LoginController', function($http, $scope, $rootScope, flash, API
             $rootScope.isLoggedIn = false; //false pga misslyckad inlogg
             console.log(data)
             flash.error = data.error;
-            localStorage["loggedIn"] = false;
-            localStorage["userId"] = null;
-            localStorage["jwtToken"] = "illegal token";
+            sessionStorage["loggedIn"] = false;
+            sessionStorage["userId"] = null;
+            sessionStorage["jwtToken"] = "illegal token";
         });
     }
 });
@@ -175,7 +175,7 @@ app.controller('EventController',
 
     }
     this.userIsOnline = function(){
-        return localStorage["loggedIn"]
+        return sessionStorage["loggedIn"]
     }
     this.deleteEvent = function(){
         if(confirm("Är du helt säker på att du vill radera skiten?")){
@@ -190,7 +190,7 @@ app.controller('EventController',
                 headers : {
                     "X-APIkey" : API.apikey,
                     "Accept" : "application/json", //responsedatan vi vill ha...
-                    'Authorization' : localStorage["jwtToken"]
+                    'Authorization' : sessionStorage["jwtToken"]
                 }
             }
 
@@ -283,7 +283,7 @@ app.controller('EventController',
             headers : {
                 "X-APIkey" : API.apikey,
                 "Accept" : "application/json", //responsedatan vi vill ha...
-                'Authorization' : localStorage["jwtToken"]
+                'Authorization' : sessionStorage["jwtToken"]
             }
         }
 
@@ -319,7 +319,7 @@ app.controller('EventController',
             headers : {
                 "X-APIkey" : API.apikey,
                 "Accept" : "application/json", //responsedatan vi vill ha...
-                'Authorization' : localStorage["jwtToken"]
+                'Authorization' : sessionStorage["jwtToken"]
             }
         }
 
@@ -373,9 +373,9 @@ app.controller('EventController',
 
     this.currentUserOwnsEvent = function(event){
         /*console.log("events Users ID = "+ event.user_id.toString())
-         console.log("user Id = "+ localStorage['userId'])*/
+         console.log("user Id = "+ sessionStorage['userId'])*/
         if(event !== undefined){
-            return event.user_id.toString() === localStorage['userId'];
+            return event.user_id.toString() === sessionStorage['userId'];
         }
 
     }
