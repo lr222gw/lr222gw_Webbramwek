@@ -114,6 +114,7 @@ app.controller('EventController',
     this.prevEvent = null;
 
     var promise = $http.get(API.baseUrl + "events?" + API.apikey);
+        console.log(API.baseUrl + "events?" + API.apikey)
 
     promise.success(function(data){
 
@@ -196,7 +197,11 @@ app.controller('EventController',
             var promise = $http.delete(API.baseUrl+"events/"+eventToEdit.id+"?"+API.apikey, config)
 
             promise.success(function(){
-
+                $scope.eventName = "";
+                $scope.positionName = "";
+                $scope.date = "";
+                $scope.desc = "";
+                $scope.tags = "";
                 EventCtrl.updateLists()
             });
             promise.error(function(){
@@ -382,6 +387,8 @@ app.controller('EventController',
         var query =  $scope.query !== undefined ? $scope.query.toLowerCase() : "" ;
         var eventTags = [];
 
+        var userEmail = event.user.email.toLowerCase();
+
         for(var i = 0; i < event.tag_on_events.length; i++){
             eventTags.push("#"+ event.tag_on_events[i].tag.name.toLowerCase())
         }
@@ -399,7 +406,7 @@ app.controller('EventController',
 
         }
 
-        if (name.search(query)!=-1 || posName.search(query)!=-1 || eventTags.indexOf(query) != -1 || severalQueryTrue) {
+        if (name.search(query)!=-1 || posName.search(query)!=-1 || eventTags.indexOf(query) != -1 || userEmail.search(query) != -1 || severalQueryTrue) {
 
             return true;
         }
@@ -458,7 +465,7 @@ app.config(function(flashProvider){
 });
 
 app.constant("API", { //Inte bra att ha nyckeln på klienten egentligen
-    'apikey' : "apikey=U3R1ZmZ0ZXN0QHRlc3Quc2UkMmEkMTAkYVJHL3EvMnZwbVF4OVRZblovYVZoLg==",
+    'apikey' : "apikey=dGVzdGVycyBBcHB0ZXN0QHRlc3Quc2UkMmEkMTAkZ0tyaXFCanEuYlF2SnZhSi41MDBULg==",
     'baseUrl' : "http://127.0.0.1:3000/api/v1/"
 });
 
